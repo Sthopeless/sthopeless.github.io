@@ -36,8 +36,8 @@ jekyll-archives:
   enabled:
     - categories
   layout: archive
-  permalinks:
-    category: '/category/:name/'
+  permalinks: /:categories/:year/:month/:day/:title:output_ext
+    # category: '/category/:name/'
     
 # Pagination 
 paginate: 6
