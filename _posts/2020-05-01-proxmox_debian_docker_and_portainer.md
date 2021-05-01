@@ -7,6 +7,7 @@ permalink: proxmox_debian_docker_and_portainer
 published: true
 categories:
 - Proxmox
+image: /assets/images/portainer_logo.jpeg
 ---
 
 Fast LXC container with updated Debian, Docker and Portainer ready to go..  
