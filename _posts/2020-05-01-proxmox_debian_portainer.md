@@ -3,11 +3,11 @@ layout: post
 title:  "Proxmox Debian with Docker and Portainer"
 date: 2020-05-01 13:00:00
 comments: false
-permalink: proxmox_debian_docker_and_portainer
+permalink: proxmox_debian_portainer
 published: true
 categories:
 - Proxmox
-image: assets/images/portainer_logo.png
+image: assets/images/portainer_logo_square.png
 ---
 
 Fast LXC container with updated Debian, Docker and Portainer ready to go..  

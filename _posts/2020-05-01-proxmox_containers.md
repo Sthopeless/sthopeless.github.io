@@ -7,7 +7,7 @@ permalink: proxmox_containers
 published: true
 categories:
 - Proxmox
-image: assets/images/proxmox_logo.png
+image: assets/images/proxmox_logo_square.png
 ---
 
 <A href="#section-1">Proxmox</A>
