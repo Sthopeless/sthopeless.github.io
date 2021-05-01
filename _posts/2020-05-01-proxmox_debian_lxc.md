@@ -7,6 +7,7 @@ permalink: proxmox_debian_lxc
 published: true
 categories:
 - Proxmox
+image: assets/images/debian_logo_square.png
 ---
 
 ![results](/assets/images/proxmox_debian_lxc_results.png)
