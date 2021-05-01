@@ -1,6 +1,6 @@
 # Site
-name: "Sthope"
-title: "Sthope"
+name: "Sthopeless"
+title: "Sthopeless"
 description: "Sthopeless"
 logo: 'assets/images/logo.png'
 favicon: 'assets/images/logo.png'
@@ -14,9 +14,9 @@ email: admin@sthopeless.com
 
 # Authors
 authors:
-  sthope:
-    name: Sthope
-    display_name: Sthope
+  sthopeless:
+    name: Sthopeless
+    display_name: Sthopeless
     avatar: 'assets/images/rick.png'
     email: admin@sthopeless.com
     web: https://www.sthopeless.com
