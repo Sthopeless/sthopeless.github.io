@@ -21,8 +21,8 @@ Some may not yet be working or need extra configuration, with time I will try to
 
 <A href="#section-2">LXC Containers List</A>
 
-* [Debian LXC](proxmox_debian_lxc.md)
-* [Debian Docker with Portainer](proxmox_debian_docker_and_portainer.md)
+* [Debian LXC](2020-05-01-proxmox_debian_lxc.md)
+* [Debian Docker with Portainer](2020-05-01-proxmox_debian_portainer.md)
 * [Debian Docker with Agent Stack]()
 * [Debian Docker]()
 * [Octoprint Docker]()
@@ -32,4 +32,4 @@ Some may not yet be working or need extra configuration, with time I will try to
 * [HTPC lxc]()
 * [MotionEye]()
 * [Node-Red]()
-* [DeConz](proxmox_debian_lxc_deconz.md)
+* [DeConz](2020-05-01-proxmox_debian_lxc_deconz.md)
