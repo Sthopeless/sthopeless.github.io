@@ -5,6 +5,8 @@ date: 2020-05-01 11:00:00
 comments: false
 permalink: proxmox_debian_lxc_containers
 published: false
+categories:
+- Proxmox
 ---
 
 <A href="#section-1">Intro</A>

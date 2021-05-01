@@ -5,5 +5,7 @@ date: 2020-05-01
 comments: false
 permalink: proxmox_debian_lxc_deconz
 published: false
+categories:
+- Proxmox
 ---
 

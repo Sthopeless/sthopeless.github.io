@@ -9,13 +9,11 @@ categories:
 - Proxmox
 ---
 
-
-</br>
-
-To install simply run this on Proxmox terminal:
+Fast LXC container with updated Debian, Docker and Portainer ready to go..  
+  
+To install simply run this on Proxmox terminal:  
 ```
 clear; bash -c "$(wget -qLO - https://git.sthopeless.com/sthope/proxmox_portainer/raw/branch/master/create_container.sh)"
-```
-</br>
+```  
 
 [Git Repository](https://git.sthopeless.com/sthope/proxmox_portainer)
