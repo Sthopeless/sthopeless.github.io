@@ -3,7 +3,7 @@ layout: post
 title:  "Proxmox Containers"
 date: 2020-05-01 11:00:00
 comments: false
-permalink: proxmox_lxc_containers
+permalink: proxmox_containers
 published: true
 categories:
 - Proxmox
