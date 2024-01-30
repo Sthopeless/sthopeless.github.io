@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker Compose to XML Converter</title>
+</head>
+<body>
+    <h1>Docker Compose to XML Converter</h1>
+
+    <label for="composeCommand">Paste Docker Compose Command:</label>
+    <textarea id="composeCommand" rows="15" cols="80"></textarea>
+
+    <button onclick="convertToXML()">Convert to XML</button>
+
+    <h2>Generated XML:</h2>
+    <pre id="xmlResult"></pre>
+
+    <script>
+        function convertToXML() {
+            const composeCommand = document.getElementById('composeCommand').value.trim();
+            const xmlResult = dockerComposeToXML(composeCommand);
+            document.getElementById('xmlResult').textContent = xmlResult;
+        }
+
+        function dockerComposeToXML(composeCommand) {
+            // Split the Docker Compose command into an array of lines
+            const lines = composeCommand.split(/\r?\n/);
+
+            // Start building the XML string
+            let xmlString = '<?xml version="1.0" encoding="utf-8"?>\n<Container>\n';
+
+            // Iterate through each line of the Docker Compose command
+            lines.forEach(line => {
+                // Assuming lines inside "services:" block are indented
+                if (line.trim() === 'services:') {
+                    return;
+                }
+
+                // Parse key-value pairs
+                const [key, value] = line.split(':');
+                if (key && value) {
+                    const trimmedKey = key.trim();
+                    const trimmedValue = value.trim();
+
+                    // Handle specific keys
+                    if (trimmedKey === 'image') {
+                        xmlString += `  <Repository>${trimmedValue}</Repository>\n`;
+                    } else if (trimmedKey === 'container_name') {
+                        xmlString += `  <Name>${trimmedValue}</Name>\n`;
+                    } else if (trimmedKey === 'environment') {
+                        xmlString += '  <Environment>\n';
+
+                        // Parse environment variables
+                        trimmedValue.split('- ').forEach(envVar => {
+                            const [envKey, envValue] = envVar.split('=');
+                            if (envKey && envValue) {
+                                xmlString += `    <Variable>\n`;
+                                xmlString += `      <Name>${envKey.trim()}</Name>\n`;
+                                xmlString += `      <Value>${envValue.trim()}</Value>\n`;
+                                xmlString += `    </Variable>\n`;
+                            }
+                        });
+
+                        xmlString += '  </Environment>\n';
+                    } else if (trimmedKey === 'volumes') {
+                        xmlString += '  <Data>\n';
+
+                        // Parse volume mappings
+                        trimmedValue.split('- ').forEach(volume => {
+                            const [hostDir, containerDir] = volume.split(':');
+                            if (hostDir && containerDir) {
+                                xmlString += `    <Volume>\n`;
+                                xmlString += `      <HostDir>${hostDir.trim()}</HostDir>\n`;
+                                xmlString += `      <ContainerDir>${containerDir.trim()}</ContainerDir>\n`;
+                                xmlString += `      <Mode>rw</Mode>\n`;
+                                xmlString += `    </Volume>\n`;
+                            }
+                        });
+
+                        xmlString += '  </Data>\n';
+                    } else if (trimmedKey === 'ports') {
+                        xmlString += '  <Networking>\n';
+                        xmlString += '    <Mode>bridge</Mode>\n';
+                        xmlString += '    <Publish>\n';
+
+                        // Parse port mappings
+                        trimmedValue.split('- ').forEach(port => {
+                            const [hostPort, containerPort] = port.split(':');
+                            if (hostPort && containerPort) {
+                                xmlString += `      <Port>\n`;
+                                xmlString += `        <HostPort>${hostPort.trim()}</HostPort>\n`;
+                                xmlString += `        <ContainerPort>${containerPort.trim()}</ContainerPort>\n`;
+                                xmlString += `        <Protocol>tcp</Protocol>\n`;
+                                xmlString += `      </Port>\n`;
+                            }
+                        });
+
+                        xmlString += '    </Publish>\n';
+                        xmlString += '  </Networking>\n';
+                    }
+                }
+            });
+
+            // Close the XML container tag
+            xmlString += '</Container>';
+
+            return xmlString;
+        }
+    </script>
+</body>
+</html>

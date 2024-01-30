@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Docker Converter</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+  <script src="assets/js/js-yaml-min.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="assets/js/themes.js"></script>
+</head>
+<body class="light-theme">
+  <h1>Xlabs Docker Compose to Docker Command Converter</h1>
+  <button id="themeButton" class="theme-button" onclick="toggleTheme()">Dark Theme</button>
+  <label for="containerFile">Container File:</label><br>
+  <textarea id="containerFile" rows="25" cols="55"></textarea><br>
+  <button onclick="convertToDockerCommand()">Convert</button>
+  <button onclick="clearConverter()">Clear</button><br>
+  <div class="command-box">
+    <h2>Converted Docker Command:</h2>
+    <pre id="dockerCommand"></pre><br>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+  </div>
+</body>
+</html>

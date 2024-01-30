@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Proxmox Passthrough HardDisk</title>
+<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+<script src="assets/js/themes.js"></script>
+<script>
+function checkForm() {
+  var num_disks = parseInt(document.getElementById("num_disks").value);
+  if (isNaN(num_disks) || num_disks < 1) {
+    alert("Please enter a valid number of harddisks to passthrough (greater than or equal to 1).");
+    return false;
+  }
+
+  var interface = document.getElementById("interface").value;
+  if (interface !== "scsi" && interface !== "sata") {
+    alert("Please select a valid interface (SCSI or SATA).");
+    return false;
+  }
+
+  var start_at = document.getElementById("start_at").value;
+  if (start_at !== "0" && start_at !== "1") {
+    alert("Please select a valid start at value (0 or 1).");
+    return false;
+  }
+
+  var vm_id = document.getElementById("vm_id").value;
+  if (vm_id === "") {
+    vm_id = "100"; // Set default VM ID to 100
+  }
+
+  var commands = [];
+  for (var i = 0; i < num_disks; i++) {
+    var serial = document.getElementById("serial_" + i).value;
+    var device_id = document.getElementById("device_id_" + i).value;
+
+    var cmd = "qm set " + vm_id + " -" + interface + (i + parseInt(start_at)) + " /dev/disk/by-id/" + device_id + ",serial=" + serial;
+    commands.push(cmd);
+  }
+
+  var commands_html = commands.join("\n");
+  document.getElementById("commands").innerHTML = "<pre>" + commands_html + "</pre>";
+
+  return false; // Prevent the form from actually submitting
+}
+
+function createFields() {
+  var num_disks = parseInt(document.getElementById("num_disks").value);
+  var fields = "";
+
+  for (var i = 0; i < num_disks; i++) {
+    fields +=
+      '<fieldset>' +
+      '<legend>Disk ' + (i + 1) + '</legend>' +
+      '<label for="serial_' + i + '">Serial:</label>' +
+      '<input type="text" id="serial_' + i + '" name="serials" placeholder="Enter serial for disk ' + (i + 1) + '"><br>' +
+      '<label for="device_id_' + i + '">Device ID:</label>' +
+      '<input type="text" id="device_id_' + i + '" name="device_ids" placeholder="Enter device ID for disk ' + (i + 1) + '"><br>' +
+      '</fieldset>';
+  }
+
+  document.getElementById("disk_fields").innerHTML = fields;
+}
+
+</script>
+</head>
+<body class="dark-theme">
+<h1>Proxmox Passthrough HardDisk</h1>
+<button id="themeButton" class="theme-button" onclick="toggleTheme()">Light Theme</button>
+<p>This page will help you generate the qm set commands for Proxmox passthrough harddisks.</p>
+<form onsubmit="return checkForm()">
+<label for="num_disks">Total of HDD:</label>
+<input type="number" id="num_disks" name="num_disks" placeholder="Number of harddisks to passthrough" onchange="createFields()" value="1">
+<br>
+<div id="disk_fields">
+  <!-- Display initial disk field -->
+  <fieldset>
+    <legend>Disk 1</legend>
+    <label for="serial_0">Serial:</label>
+    <input type="text" id="serial_0" name="serials" placeholder="Enter serial for disk 1"><br>
+    <label for="device_id_0">Device ID:</label>
+    <input type="text" id="device_id_0" name="device_ids" placeholder="Enter device ID for disk 1"><br>
+  </fieldset>
+</div>
+<label for="vm_id">VM ID:</label>
+<input type="text" id="vm_id" name="vm_id" placeholder="VM ID">
+<select id="interface" name="interface">
+<option value="scsi">SCSI</option>
+<option value="sata">SATA</option>
+</select>
+<select id="start_at" name="start_at">
+<option value="1">Start at 1</option>
+<option value="0">Start at 0</option>
+</select>
+<br>
+<input style="display: block; margin: 0 auto;" type="submit" value="Generate Commands">
+<br>
+</form>
+<div id="commands"></div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WoW Raid Tracker</title>
+    <link rel="stylesheet" href="assets/css/wow.css">
+</head>
+<body>
+    <h1>WoW Raid Tracker</h1>
+    <form id="raidForm">
+        <table>
+            <thead>
+                <tr>
+                    <th>Raids</th>
+                    <th>Priest</th>
+                    <th>Hunter</th>
+                    <th>Druid</th>
+                    <th>Dracaris</th>
+                    <th>DM</th>
+                    <th>DK</th>
+                    <th>Mage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Firelands 25-Heroic</td>
+                    <td><input type="checkbox" name="firelandsHeroic-character1"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character2"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character3"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character4"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character5"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character6"></td>
+                    <td><input type="checkbox" name="firelandsHeroic-character7"></td>
+                </tr>
+                <tr>
+                    <td>Firelands 25-Normal</td>
+                    <td><input type="checkbox" name="firelandsNormal-character1"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character2"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character3"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character4"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character5"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character6"></td>
+                    <td><input type="checkbox" name="firelandsNormal-character7"></td>
+                </tr>
+                <!-- Add rows for other raids -->
+                <tr>
+                  <td>ICC 25-Heroic</td>
+                  <td><input type="checkbox" name="firelandsNormal-character1"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character2"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character3"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character4"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character5"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character6"></td>
+                  <td><input type="checkbox" name="firelandsNormal-character7"></td>
+              </tr>
+              <!-- 1 -->
+              <tr>
+                <td>Oondasta</td>
+                <td><input type="checkbox" name="oondasta-character1"></td>
+                <td><input type="checkbox" name="oondasta-character2"></td>
+                <td><input type="checkbox" name="oondasta-character3"></td>
+                <td><input type="checkbox" name="oondasta-character4"></td>
+                <td><input type="checkbox" name="oondasta-character5"></td>
+                <td><input type="checkbox" name="oondasta-character6"></td>
+                <td><input type="checkbox" name="oondasta-character7"></td>
+              </tr>
+              <tr>
+                <td>Nalak</td>
+                <td><input type="checkbox" name="nalak-character1"></td>
+                <td><input type="checkbox" name="nalak-character2"></td>
+                <td><input type="checkbox" name="nalak-character3"></td>
+                <td><input type="checkbox" name="nalak-character4"></td>
+                <td><input type="checkbox" name="nalak-character5"></td>
+                <td><input type="checkbox" name="nalak-character6"></td>
+              <td><input type="checkbox" name="nalak-character7"></td>
+              </tr>
+              <tr>
+                <td>Galleon</td>
+                <td><input type="checkbox" name="galleon-character1"></td>
+                <td><input type="checkbox" name="galleon-character2"></td>
+                <td><input type="checkbox" name="galleon-character3"></td>
+                <td><input type="checkbox" name="galleon-character4"></td>
+                <td><input type="checkbox" name="galleon-character5"></td>
+                <td><input type="checkbox" name="galleon-character6"></td>
+                <td><input type="checkbox" name="galleon-character7"></td>
+              </tr>
+              <!-- World Bosses -->
+              <tr>
+                <td>Oondasta</td>
+                <td><input type="checkbox" name="oondasta-character1"></td>
+                <td><input type="checkbox" name="oondasta-character2"></td>
+                <td><input type="checkbox" name="oondasta-character3"></td>
+                <td><input type="checkbox" name="oondasta-character4"></td>
+                <td><input type="checkbox" name="oondasta-character5"></td>
+                <td><input type="checkbox" name="oondasta-character6"></td>
+                <td><input type="checkbox" name="oondasta-character7"></td>
+              </tr>
+              <tr>
+                <td>Nalak</td>
+                <td><input type="checkbox" name="nalak-character1"></td>
+                <td><input type="checkbox" name="nalak-character2"></td>
+                <td><input type="checkbox" name="nalak-character3"></td>
+                <td><input type="checkbox" name="nalak-character4"></td>
+                <td><input type="checkbox" name="nalak-character5"></td>
+                <td><input type="checkbox" name="nalak-character6"></td>
+              <td><input type="checkbox" name="nalak-character7"></td>
+              </tr>
+              <tr>
+                <td>Galleon</td>
+                <td><input type="checkbox" name="galleon-character1"></td>
+                <td><input type="checkbox" name="galleon-character2"></td>
+                <td><input type="checkbox" name="galleon-character3"></td>
+                <td><input type="checkbox" name="galleon-character4"></td>
+                <td><input type="checkbox" name="galleon-character5"></td>
+                <td><input type="checkbox" name="galleon-character6"></td>
+                <td><input type="checkbox" name="galleon-character7"></td>
+              </tr>
+            </tbody>
+        </table>
+
+        <br><button type="button" onclick="submitForm()">Submit</button>
+
+    </form>
+    <script src="assets/js/wow.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+text-align: center;
+}
+
+.theme-button {
+position: absolute;
+top: 10px;
+right: 10px;
+}
+
+.light-theme {
+background-color: #6e6e6e;
+color: #f2f2f2;
+}
+
+.dark-theme {
+background-color: #333333;
+color: #f2f2f2;
+}
+
+.command-box {
+position: relative;
+background-color: #f2f2f2;
+border: 1px solid #cccccc;
+padding: 10px;
+margin-top: 20px;
+width: 30%; /* Reduce the width to 50% */
+color: #000000; /* Set the font color to black */
+}
+
+.command-box.dark-theme {
+background-color: #333333;
+border-color: #cccccc;
+color: #ffffff; /* Set the font color to white */
+}
+
+.command-box h2 {
+margin-top: 0;
+/* text-align: center; */
+}
+
+.command-box pre {
+font-family: monospace;
+white-space: pre-wrap;
+margin: auto;
+padding: 10px;
+}
+
+h1 {
+  text-align: center;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+label {
+  display: inline-block;
+  width: 150px;
+}
+
+input[type="number"] {
+  width: 100px;
+}
+
+p#totalPrice {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}

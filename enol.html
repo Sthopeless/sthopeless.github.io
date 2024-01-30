@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="assets/css/enol.css">
+  <title>XML Generator</title>
+  <style>
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>XML Generator</h2>
+
+  <form id="xmlForm">
+    <label for="templateURL">Template URL:</label>
+    <input type="text" id="templateURL" required>
+
+    <label for="beta">Beta:</label>
+    <input type="checkbox" id="beta">
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" required>
+
+    <label for="date">Date:</label>
+    <input type="text" id="date" required>
+
+    <label for="support">Support:</label>
+    <input type="text" id="support" required>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" rows="4" required></textarea>
+
+    <label for="project">Project:</label>
+    <input type="text" id="project" required>
+
+    <label for="registry">Registry:</label>
+    <input type="text" id="registry" required>
+
+    <label for="repository">Repository:</label>
+    <input type="text" id="repository" required>
+
+    <label for="bindTime">Bind Time:</label>
+    <input type="checkbox" id="bindTime">
+
+    <label for="branchTag">Branch Tag:</label>
+    <input type="text" id="branchTag">
+
+    <label for="privileged">Privileged:</label>
+    <input type="checkbox" id="privileged">
+
+    <label for="puid">PUID:</label>
+    <input type="text" id="puid" required>
+
+    <label for="pgid">PGID:</label>
+    <input type="text" id="pgid" required>
+
+    <label for="networkMode">Networking Mode:</label>
+    <input type="text" id="networkMode" required>
+
+    <label for="hostPort">Host Port:</label>
+    <input type="text" id="hostPort">
+
+    <label for="containerPort">Container Port:</label>
+    <input type="text" id="containerPort" required>
+
+    <label for="protocol">Protocol:</label>
+    <input type="text" id="protocol" required>
+
+    <label for="configVolume">Config Volume:</label>
+    <input type="text" id="configVolume">
+
+    <label for="configContainerDir">Config Container Dir:</label>
+    <input type="text" id="configContainerDir" required>
+
+    <label for="configMode">Config Mode:</label>
+    <input type="text" id="configMode" required>
+
+    <label for="dataVolume">Data Volume:</label>
+    <input type="text" id="dataVolume">
+
+    <label for="dataContainerDir">Data Container Dir:</label>
+    <input type="text" id="dataContainerDir" required>
+
+    <label for="dataMode">Data Mode:</label>
+    <input type="text" id="dataMode" required>
+
+    <label for="version">Version:</label>
+    <input type="text" id="version" required>
+
+    <label for="webUI">Web UI:</label>
+    <input type="text" id="webUI" required>
+
+    <label for="icon">Icon:</label>
+    <input type="text" id="icon" required>
+
+    <label for="extraParams">Extra Params:</label>
+    <input type="text" id="extraParams">
+
+    <label for="donateText">Donate Text:</label>
+    <input type="text" id="donateText">
+
+    <label for="donateLink">Donate Link:</label>
+    <input type="text" id="donateLink">
+
+    <label for="donateImg">Donate Img:</label>
+    <input type="text" id="donateImg">
+
+    <label for="baseImage">Base Image:</label>
+    <input type="text" id="baseImage" required>
+
+    <button type="button" onclick="generateXML()">Generate XML</button>
+  </form>
+
+  <hr>
+
+  <h3>Generated XML:</h3>
+  <pre id="generatedXML"></pre>
+
+  <script src="assets/js/enol.js"></script>
+</body>
+</html>
