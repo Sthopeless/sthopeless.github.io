@@ -3,12 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RaceProfSkill</title>
-    <link rel="stylesheet" href="assets/css/wow.css">
+    <title>WoW Profession Table</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function updateDisplay() {
+            const race = document.getElementById("raceDropdown").value;
+            const rows = document.querySelectorAll("tbody tr");
+            const display = document.getElementById("raceInfo");
+            display.innerHTML = ""; // Clear previous entries
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                if (cells[1].textContent === race) {
+                    const profession = cells[0].textContent;
+                    const bonus = cells[2].textContent;
+                    const item = document.createElement("p");
+                    item.textContent = `[${profession}] [${bonus}]`;
+                    display.appendChild(item);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>WoW Profession Table</h1>
+        <div>
+            <label for="raceDropdown">Select Race: </label>
+            <select id="raceDropdown" onchange="updateDisplay()">
+                <option value="">-- Select a Race --</option>
+                <option value="Goblin">Goblin</option>
+                <option value="Kul Tiran">Kul Tiran</option>
+                <option value="Dark Iron Dwarf">Dark Iron Dwarf</option>
+                <option value="Lightforged Draenei">Lightforged Draenei</option>
+                <option value="Pandaren">Pandaren</option>
+                <option value="Blood Elf">Blood Elf</option>
+                <option value="Gnome">Gnome</option>
+                <option value="Highmountain Tauren">Highmountain Tauren</option>
+                <option value="Tauren">Tauren</option>
+                <option value="Dracthyr">Dracthyr</option>
+                <option value="Earthen">Earthen</option>
+                <option value="Nightborne">Nightborne</option>
+                <option value="Draenei">Draenei</option>
+                <option value="Worgen">Worgen</option>
+            </select>
+        </div>
+        <div id="raceInfo" style="margin-top: 20px;"></div>
+
         <table>
             <thead>
                 <tr>
