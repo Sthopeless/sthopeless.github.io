@@ -29,8 +29,24 @@
     <div class="container">
         <h1>WoW Profession Table</h1>
         <div>
-            <label for="raceDropdown">Type Race: </label>
-            <input id="raceDropdown" type="text" oninput="updateDisplay()" placeholder="Enter race name...">
+            <label for="raceDropdown">Select or Type Race: </label>
+            <input list="raceOptions" id="raceDropdown" oninput="updateDisplay()" placeholder="Enter or select race name...">
+            <datalist id="raceOptions">
+                <option value="Goblin"></option>
+                <option value="Kul Tiran"></option>
+                <option value="Dark Iron Dwarf"></option>
+                <option value="Lightforged Draenei"></option>
+                <option value="Pandaren"></option>
+                <option value="Blood Elf"></option>
+                <option value="Gnome"></option>
+                <option value="Highmountain Tauren"></option>
+                <option value="Tauren"></option>
+                <option value="Dracthyr"></option>
+                <option value="Earthen"></option>
+                <option value="Nightborne"></option>
+                <option value="Draenei"></option>
+                <option value="Worgen"></option>
+            </datalist>
         </div>
         <div id="raceInfo" style="margin-top: 20px;"></div>
 
