@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToolsCrafters</title>
     <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text */
+            font-family: Arial, sans-serif;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #333;
         }
         th, td {
             padding: 8px;
@@ -18,18 +23,27 @@
         }
         th select {
             width: 100%;
+            background-color: #333;
+            color: #e0e0e0;
         }
         th {
             cursor: pointer;
+            background-color: #444;
         }
         .bonus-low {
-            background-color: #ffcccc;
+            background-color: #66cc66; /* Light green for 5 */
         }
         .bonus-medium {
-            background-color: #fff3cc;
+            background-color: #4dff4d; /* Darker green for 8 */
         }
-        .bonus-high {
-            background-color: #ccffcc;
+        .bonus-blue-light {
+            background-color: #3399ff; /* Light blue for 11 */
+        }
+        .bonus-blue-dark {
+            background-color: #0066cc; /* Darker blue for 18 */
+        }
+        .bonus-purple {
+            background-color: #800080; /* Purple for Bags */
         }
     </style>
 </head>
@@ -102,12 +116,16 @@
                     // Apply background color based on "Bonus" column
                     if (colIndex === 2) { // Bonus column index is 2
                         const bonusValue = parseInt(column.trim(), 10);
-                        if (bonusValue <= 5) {
+                        if (bonusValue === 5) {
                             newRow.classList.add('bonus-low');
-                        } else if (bonusValue <= 10) {
+                        } else if (bonusValue === 8) {
                             newRow.classList.add('bonus-medium');
-                        } else {
-                            newRow.classList.add('bonus-high');
+                        } else if (bonusValue === 11) {
+                            newRow.classList.add('bonus-blue-light');
+                        } else if (bonusValue === 18) {
+                            newRow.classList.add('bonus-blue-dark');
+                        } else if (column.toLowerCase().includes('bags')) {
+                            newRow.classList.add('bonus-purple');
                         }
                     }
                 });
@@ -187,12 +205,16 @@
                     // Apply background color based on "Bonus" column
                     if (colIndex === 2) {
                         const bonusValue = parseInt(column.trim(), 10);
-                        if (bonusValue <= 5) {
+                        if (bonusValue === 5) {
                             newRow.classList.add('bonus-low');
-                        } else if (bonusValue <= 10) {
+                        } else if (bonusValue === 8) {
                             newRow.classList.add('bonus-medium');
-                        } else {
-                            newRow.classList.add('bonus-high');
+                        } else if (bonusValue === 11) {
+                            newRow.classList.add('bonus-blue-light');
+                        } else if (bonusValue === 18) {
+                            newRow.classList.add('bonus-blue-dark');
+                        } else if (column.toLowerCase().includes('bags')) {
+                            newRow.classList.add('bonus-purple');
                         }
                     }
                 });
@@ -232,12 +254,16 @@
                 // Apply background color based on "Bonus" column
                 if (colIndex === 2) {
                     const bonusValue = parseInt(column.trim(), 10);
-                    if (bonusValue <= 5) {
+                    if (bonusValue === 5) {
                         newRow.classList.add('bonus-low');
-                    } else if (bonusValue <= 10) {
+                    } else if (bonusValue === 8) {
                         newRow.classList.add('bonus-medium');
-                    } else {
-                        newRow.classList.add('bonus-high');
+                    } else if (bonusValue === 11) {
+                        newRow.classList.add('bonus-blue-light');
+                    } else if (bonusValue === 18) {
+                        newRow.classList.add('bonus-blue-dark');
+                    } else if (column.toLowerCase().includes('bags')) {
+                        newRow.classList.add('bonus-purple');
                     }
                 }
             });
