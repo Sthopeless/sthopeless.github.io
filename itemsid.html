@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Table Viewer</title>
+    <title>itemsID</title>
     <style>
         body {
             background-color: #121212;
@@ -26,29 +26,55 @@
             position: relative;
             background-color: #444;
         }
-        .bonus-5 {
+        .bonus-alchemy {
             background-color: #93c47d;
         }
-        .bonus-8 {
+        .bonus-blacksmith {
             background-color: #6aa84f;
         }
-        .bonus-11 {
+        .bonus-enchanting {
             background-color: #6fa8dc;
         }
-        .bonus-18 {
+        .bonus-engineering {
+            background-color: #3c78d8;
+        }
+        .bonus-herbalism {
+            background-color: #3c78d8;
+        }
+        .bonus-inscription {
+            background-color: #3c78d8;
+        }
+        .bonus-jewelcrafting {
+            background-color: #3c78d8;
+        }
+        .bonus-leatherworking {
+            background-color: #3c78d8;
+        }
+        .bonus-mining {
+            background-color: #3c78d8;
+        }
+        .bonus-skinning {
+            background-color: #3c78d8;
+        }
+        .bonus-tailoring {
+            background-color: #3c78d8;
+        }
+        .bonus-cooking {
+            background-color: #3c78d8;
+        }
+        .bonus-fishing {
             background-color: #3c78d8;
         }
     </style>
 </head>
 <body>
-    <h1>CSV Table Viewer</h1>
+    <h1>itemsID</h1>
     <table id="csv-table">
         <thead>
             <tr>
                 <th>PROFESSION</th>
                 <th>RECIPE</th>
                 <th>RECIPE ID</th>
-                <th>ABILITY ID</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -73,16 +99,34 @@
                         td.textContent = cell.trim();
                         tr.appendChild(td);
                         if (index === 3) {
-                            const bonusValue = parseInt(cell.trim(), 10);
-                            if (bonusValue === 5) {
-                                tr.classList.add('bonus-5');
-                            } else if (bonusValue === 8) {
-                                tr.classList.add('bonus-8');
-                            } else if (bonusValue === 11) {
-                                tr.classList.add('bonus-11');
-                            } else if (bonusValue === 18) {
-                                tr.classList.add('bonus-18');
-                            }
+                            const professionValue = parseInt(cell.trim(), 10);
+                            if (professionValue === 5) {
+                                tr.classList.add('bonus-alchemy');
+                            } else if (professionValue === 8) {
+                                tr.classList.add('bonus-blacksmith');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-enchanting');
+                            } else if (professionValue === 18) {
+                                tr.classList.add('bonus-engineering');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-herbalism');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-inscription');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-jewelcrafting');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-leatherworking');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-mining');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-skinning');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-tailoring');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-cooking');
+                            } else if (professionValue === 11) {
+                                tr.classList.add('bonus-fishing');
+                            } else if (professionValue === 11) {
                         }
                     });
                     tbody.appendChild(tr);
@@ -91,7 +135,6 @@
                 console.error("Error loading CSV:", error);
             }
         }
-
         document.addEventListener("DOMContentLoaded", loadCSV);
     </script>
 </body>
