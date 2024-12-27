@@ -6,8 +6,8 @@
     <title>ToolsCrafters</title>
     <style>
         body {
-            background-color: #121212; /* Dark background */
-            color: #e0e0e0; /* Light text */
+            background-color: #121212;
+            color: #e0e0e0;
             font-family: Arial, sans-serif;
         }
         table {
@@ -31,19 +31,19 @@
             background-color: #444;
         }
         .bonus-low {
-            background-color: #66cc66; /* Light green for 5 */
+            background-color: #66cc66; /* for 5 */
         }
         .bonus-medium {
-            background-color: #4dff4d; /* Darker green for 8 */
+            background-color: #27e027; /* for 8 */
         }
         .bonus-blue-light {
-            background-color: #3399ff; /* Light blue for 11 */
+            background-color: #3399ff; /* for 11 */
         }
         .bonus-blue-dark {
-            background-color: #0066cc; /* Darker blue for 18 */
+            background-color: #0066cc; /* for 18 */
         }
         .bonus-purple {
-            background-color: #800080; /* Purple for Bags */
+            background-color: #800080; /* for Bags */
         }
     </style>
 </head>
@@ -78,12 +78,10 @@
         </tr>
     </thead>
     <tbody>
-        <!-- Data will be inserted here -->
     </tbody>
 </table>
 
 <script>
-    // Function to handle CSV file upload
     document.getElementById('csvFile').addEventListener('change', function(e) {
         let file = e.target.files[0];
         if (file && file.name.endsWith('.csv')) {
@@ -96,25 +94,22 @@
         }
     });
 
-    // Function to parse CSV and insert data into the table
     function parseCSV(csv) {
         const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
         const headers = rows[0].split(',');
 
-        // Insert table data
-        tableBody.innerHTML = '';  // Clear the existing table data
+        tableBody.innerHTML = '';
         let allData = [];
         rows.forEach((row, index) => {
-            if (index === 0) return; // Skip header row
+            if (index === 0) return;
             const columns = row.split(',');
             if (columns.length === 9) {
                 const newRow = tableBody.insertRow();
                 columns.forEach((column, colIndex) => {
                     let cell = newRow.insertCell(colIndex);
                     cell.textContent = column.trim();
-                    // Apply background color based on "Bonus" column
-                    if (colIndex === 2) { // Bonus column index is 2
+                    if (colIndex === 2) {
                         const bonusValue = parseInt(column.trim(), 10);
                         if (bonusValue === 5) {
                             newRow.classList.add('bonus-low');
@@ -133,13 +128,10 @@
             }
         });
 
-        // Fill dropdown filters
         fillFilters(allData);
 
-        // Attach filter events
         attachFilterEvents(allData);
 
-        // Attach sort events
         attachSortEvents(allData);
     }
 
@@ -153,7 +145,7 @@
         filterSelectors.forEach((filter, index) => {
             const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
             const select = document.getElementById(filter);
-            select.innerHTML = '<option value="">All</option>'; // Add "All" option
+            select.innerHTML = '<option value="">All</option>';
 
             uniqueValues.forEach(value => {
                 const option = document.createElement('option');
@@ -186,9 +178,8 @@
         ];
 
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';  // Clear the table
+        tableBody.innerHTML = '';
 
-        // Apply filters and repopulate table
         allData.forEach(row => {
             let match = true;
             filters.forEach((filter, index) => {
@@ -202,7 +193,6 @@
                 row.forEach((column, colIndex) => {
                     let cell = newRow.insertCell(colIndex);
                     cell.textContent = column.trim();
-                    // Apply background color based on "Bonus" column
                     if (colIndex === 2) {
                         const bonusValue = parseInt(column.trim(), 10);
                         if (bonusValue === 5) {
@@ -235,7 +225,6 @@
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
         const sortedData = [...allData];
 
-        // Sort data by the clicked column index
         sortedData.sort((a, b) => {
             const valueA = a[columnIndex].toLowerCase();
             const valueB = b[columnIndex].toLowerCase();
@@ -244,14 +233,12 @@
             return 0;
         });
 
-        // Clear the table and insert sorted data
         tableBody.innerHTML = '';
         sortedData.forEach(row => {
             const newRow = tableBody.insertRow();
             row.forEach((column, colIndex) => {
                 let cell = newRow.insertCell(colIndex);
                 cell.textContent = column.trim();
-                // Apply background color based on "Bonus" column
                 if (colIndex === 2) {
                     const bonusValue = parseInt(column.trim(), 10);
                     if (bonusValue === 5) {
