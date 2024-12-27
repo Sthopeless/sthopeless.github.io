@@ -20,9 +20,9 @@
                     const profession = cells[0].textContent;
                     const bonus = cells[2].textContent;
                     const item = document.createElement("p");
-                    itemP.textContent = `Profession:${profession}`;
+                    item.textContent = `Profession:${profession}`;
+                    display.appendChild(item);
                     itemB.textContent = `Bonus:${bonus}`;
-                    display.appendChild(itemP);
                     display.appendChild(itemB);
                 }
             });
