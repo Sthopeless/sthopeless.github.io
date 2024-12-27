@@ -65,15 +65,15 @@
             <th>Materials</th>
         </tr>
         <tr>
-            <th><select id="filterItem"></select></th>
-            <th><select id="filterProfession"></select></th>
-            <th><select id="filterBonus"></select></th>
-            <th><select id="filterCrafter"></select></th>
-            <th><select id="filterArtisansAcuity"></select></th>
-            <th><select id="filterQuality"></select></th>
-            <th><select id="filterItemProfession"></select></th>
-            <th><select id="filterConc"></select></th>
-            <th><select id="filterMaterials"></select></th>
+            <th><select id="filterItem" multiple></select></th>
+            <th><select id="filterProfession" multiple></select></th>
+            <th><select id="filterBonus" multiple></select></th>
+            <th><select id="filterCrafter" multiple></select></th>
+            <th><select id="filterArtisansAcuity" multiple></select></th>
+            <th><select id="filterQuality" multiple></select></th>
+            <th><select id="filterItemProfession" multiple></select></th>
+            <th><select id="filterConc" multiple></select></th>
+            <th><select id="filterMaterials" multiple></select></th>
         </tr>
     </thead>
     <tbody>
@@ -81,148 +81,38 @@
 </table>
 
 <script>
-    const googleSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
     let allData = [];
-    let sortOrder = {};
 
-    fetch(googleSheetURL)
-        .then(response => response.text())
-        .then(csvData => parseCSV(csvData))
-        .catch(error => console.error("Error fetching CSV:", error));
+    window.onload = function() {
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => parseCSV(data))
+            .catch(error => console.error('Error fetching the Google Sheet:', error));
+    };
 
     function parseCSV(csv) {
         const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
 
         rows.forEach((row, index) => {
+            if (index === 0) return; // Skip header row
             const columns = row.split(',');
-            if (index === 0) return;
             if (columns.length === 9) {
-                const newRow = tableBody.insertRow();
-                columns.forEach((column, colIndex) => {
-                    let cell = newRow.insertCell(colIndex);
-                    cell.textContent = column.trim();
-                    if (colIndex === 2) {
-                        const bonusValue = parseInt(column.trim(), 10);
-                        if (bonusValue === 5) {
-                            newRow.classList.add('bonus-5');
-                        } else if (bonusValue === 8) {
-                            newRow.classList.add('bonus-8');
-                        } else if (bonusValue === 11) {
-                            newRow.classList.add('bonus-11');
-                        } else if (bonusValue === 18) {
-                            newRow.classList.add('bonus-18');
-                        } else if (column.toLowerCase().includes('bag')) {
-                            newRow.classList.add('bonus-bags');
-                        }
-                    }
-                });
-                allData.push(columns);
+                allData.push(columns); // Save data for filtering/sorting
             }
         });
 
+        renderTable(allData);
         fillFilters(allData);
         attachFilterEvents();
         attachSortEvents();
     }
 
-    function fillFilters(data) {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach((filter, index) => {
-            const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
-            const select = document.getElementById(filter);
-            select.innerHTML = '<option value="">All</option>';
-
-            uniqueValues.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                select.appendChild(option);
-            });
-        });
-    }
-
-    function attachFilterEvents() {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach((filter, index) => {
-            document.getElementById(filter).addEventListener('change', function() {
-                filterTable();
-            });
-        });
-    }
-
-    function filterTable() {
-        const filters = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
-
-        const filteredData = allData.filter(row => {
-            return filters.every((filter, index) => {
-                const filterValue = document.getElementById(filter).value;
-                return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
-            });
-        });
-
-        renderTable(filteredData);
-    }
-
-    function attachSortEvents() {
-        const tableHeaders = document.querySelectorAll('th');
-        tableHeaders.forEach((header, index) => {
-            header.addEventListener('click', function() {
-                sortTable(index);
-            });
-        });
-    }
-
-    function sortTable(columnIndex) {
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-
-        if (!sortOrder[columnIndex]) {
-            sortOrder[columnIndex] = 'asc';
-        } else {
-            sortOrder[columnIndex] = sortOrder[columnIndex] === 'asc' ? 'desc' : 'asc';
-        }
-
-        const filteredData = allData.filter(row => {
-            return Array.from(document.querySelectorAll('select')).every((select, index) => {
-                const filterValue = select.value;
-                return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
-            });
-        });
-
-        filteredData.sort((a, b) => {
-            const valueA = a[columnIndex].toLowerCase();
-            const valueB = b[columnIndex].toLowerCase();
-
-            if (sortOrder[columnIndex] === 'asc') {
-                return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
-            } else {
-                return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
-            }
-        });
-
-        tableBody.innerHTML = '';
-        renderTable(filteredData);
-    }
-
     function renderTable(data) {
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';
+
         data.forEach(row => {
             const newRow = tableBody.insertRow();
             row.forEach((column, colIndex) => {
@@ -244,6 +134,79 @@
                 }
             });
         });
+    }
+
+    function fillFilters(data) {
+        const filterSelectors = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
+            'filterConc', 'filterMaterials'
+        ];
+
+        filterSelectors.forEach((filter, index) => {
+            const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
+            const select = document.getElementById(filter);
+            select.innerHTML = '<option value="">All</option>';
+
+            uniqueValues.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+        });
+    }
+
+    function attachFilterEvents() {
+        const filterSelectors = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
+            'filterConc', 'filterMaterials'
+        ];
+
+        filterSelectors.forEach(filter => {
+            document.getElementById(filter).addEventListener('change', filterTable);
+        });
+    }
+
+    function filterTable() {
+        const filters = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
+            'filterConc', 'filterMaterials'
+        ];
+
+        const filteredData = allData.filter(row => {
+            return filters.every((filter, index) => {
+                const select = document.getElementById(filter);
+                const selectedOptions = Array.from(select.selectedOptions).map(opt => opt.value.toLowerCase());
+
+                if (selectedOptions.length === 0 || selectedOptions.includes("")) {
+                    return true;
+                }
+                const cellValue = row[index].toLowerCase();
+                return selectedOptions.some(selectedValue => cellValue.includes(selectedValue));
+            });
+        });
+
+        renderTable(filteredData);
+    }
+
+    function attachSortEvents() {
+        const tableHeaders = document.querySelectorAll('thead tr:first-child th');
+        tableHeaders.forEach((header, index) => {
+            header.addEventListener('click', () => sortTable(index));
+        });
+    }
+
+    function sortTable(columnIndex) {
+        const sortedData = [...allData].sort((a, b) => {
+            const valueA = a[columnIndex].toLowerCase();
+            const valueB = b[columnIndex].toLowerCase();
+            return valueA.localeCompare(valueB);
+        });
+
+        renderTable(sortedData);
     }
 </script>
 
