@@ -16,6 +16,9 @@
             padding: 8px;
             text-align: left;
         }
+        th select {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -35,6 +38,17 @@
             <th>Item Profession</th>
             <th>Conc</th>
             <th>Materials</th>
+        </tr>
+        <tr>
+            <th><select id="filterItem"></select></th>
+            <th><select id="filterProfession"></select></th>
+            <th><select id="filterBonus"></select></th>
+            <th><select id="filterCrafter"></select></th>
+            <th><select id="filterArtisansAcuity"></select></th>
+            <th><select id="filterQuality"></select></th>
+            <th><select id="filterItemProfession"></select></th>
+            <th><select id="filterConc"></select></th>
+            <th><select id="filterMaterials"></select></th>
         </tr>
     </thead>
     <tbody>
@@ -60,14 +74,88 @@
     function parseCSV(csv) {
         const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';  // Clear the existing table data
+        const headers = rows[0].split(',');
 
+        // Insert table data
+        tableBody.innerHTML = '';  // Clear the existing table data
+        let allData = [];
         rows.forEach((row, index) => {
             if (index === 0) return; // Skip header row
             const columns = row.split(',');
             if (columns.length === 9) {
                 const newRow = tableBody.insertRow();
                 columns.forEach((column, colIndex) => {
+                    let cell = newRow.insertCell(colIndex);
+                    cell.textContent = column.trim();
+                });
+                allData.push(columns);
+            }
+        });
+
+        // Fill dropdown filters
+        fillFilters(allData);
+
+        // Attach filter events
+        attachFilterEvents(allData);
+    }
+
+    function fillFilters(data) {
+        const filterSelectors = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
+            'filterConc', 'filterMaterials'
+        ];
+
+        filterSelectors.forEach((filter, index) => {
+            const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
+            const select = document.getElementById(filter);
+            select.innerHTML = '<option value="">All</option>'; // Add "All" option
+
+            uniqueValues.forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+        });
+    }
+
+    function attachFilterEvents(allData) {
+        const filterSelectors = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
+            'filterConc', 'filterMaterials'
+        ];
+
+        filterSelectors.forEach((filter, index) => {
+            document.getElementById(filter).addEventListener('change', function() {
+                filterTable(allData);
+            });
+        });
+    }
+
+    function filterTable(allData) {
+        const filters = [
+            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
+            'filterConc', 'filterMaterials'
+        ];
+
+        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';  // Clear the table
+
+        // Apply filters and repopulate table
+        allData.forEach(row => {
+            let match = true;
+            filters.forEach((filter, index) => {
+                const filterValue = document.getElementById(filter).value;
+                if (filterValue && row[index].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
+                    match = false;
+                }
+            });
+            if (match) {
+                const newRow = tableBody.insertRow();
+                row.forEach((column, colIndex) => {
                     let cell = newRow.insertCell(colIndex);
                     cell.textContent = column.trim();
                 });
