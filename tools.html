@@ -30,20 +30,20 @@
             cursor: pointer;
             background-color: #444;
         }
-        .bonus-low {
-            background-color: #66cc66; /* +5 */
+        .bonus-5 {
+            background-color: #b6d7a8; /* +5 */
         }
-        .bonus-medium {
-            background-color: #27e027; /* +8 */
+        .bonus-8 {
+            background-color: #93c47d; /* +8 */
         }
-        .bonus-blue-light {
-            background-color: #3399ff; /* +11 */
+        .bonus-11 {
+            background-color: #6fa8dc; /* +11 */
         }
-        .bonus-blue-dark {
-            background-color: #0066cc; /* +18 */
+        .bonus-18 {
+            background-color: #3c78d8; /* +18 */
         }
-        .bonus-purple {
-            background-color: #800080; /* Bags */
+        .bonus-bags {
+            background-color: #d5a6bd; /* Bags */
         }
     </style>
 </head>
@@ -112,15 +112,15 @@
                     if (colIndex === 2) {
                         const bonusValue = parseInt(column.trim(), 10);
                         if (bonusValue === 5) {
-                            newRow.classList.add('bonus-low');
+                            newRow.classList.add('bonus-5');
                         } else if (bonusValue === 8) {
-                            newRow.classList.add('bonus-medium');
+                            newRow.classList.add('bonus-8');
                         } else if (bonusValue === 11) {
-                            newRow.classList.add('bonus-blue-light');
+                            newRow.classList.add('bonus-11');
                         } else if (bonusValue === 18) {
-                            newRow.classList.add('bonus-blue-dark');
-                        } else if (column.toLowerCase().includes('bags')) {
-                            newRow.classList.add('bonus-purple');
+                            newRow.classList.add('bonus-18');
+                        } else if (column.toLowerCase().includes('bag')) {
+                            newRow.classList.add('bonus-bags');
                         }
                     }
                 });
