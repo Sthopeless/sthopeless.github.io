@@ -249,41 +249,55 @@
     }
 
     function sortTable(columnIndex, allData) {
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        const sortedData = [...allData];
+    const filters = [
+        'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
+        'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
+        'filterConc', 'filterMaterials'
+    ];
 
-        // Toggle the sort order
-        if (!sortOrder[columnIndex] || sortOrder[columnIndex] === 'desc') {
-            sortedData.sort((a, b) => a[columnIndex].toLowerCase() < b[columnIndex].toLowerCase() ? -1 : 1);
-            sortOrder[columnIndex] = 'asc';
-        } else {
-            sortedData.sort((a, b) => a[columnIndex].toLowerCase() > b[columnIndex].toLowerCase() ? -1 : 1);
-            sortOrder[columnIndex] = 'desc';
-        }
-
-        tableBody.innerHTML = '';
-        sortedData.forEach(row => {
-            const newRow = tableBody.insertRow();
-            row.forEach((column, colIndex) => {
-                let cell = newRow.insertCell(colIndex);
-                cell.textContent = column.trim();
-                if (colIndex === 2) {
-                    const bonusValue = parseInt(column.trim(), 10);
-                    if (bonusValue === 5) {
-                        newRow.classList.add('bonus-5');
-                    } else if (bonusValue === 8) {
-                        newRow.classList.add('bonus-8');
-                    } else if (bonusValue === 11) {
-                        newRow.classList.add('bonus-11');
-                    } else if (bonusValue === 18) {
-                        newRow.classList.add('bonus-18');
-                    } else if (column.toLowerCase().includes('bag')) {
-                        newRow.classList.add('bonus-bags');
-                    }
-                }
-            });
+    // Filter the data first based on active filters
+    const filteredData = allData.filter(row => {
+        return filters.every((filter, index) => {
+            const filterValue = document.getElementById(filter).value;
+            return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
         });
+    });
+
+    // Sort the filtered data
+    if (!sortOrder[columnIndex] || sortOrder[columnIndex] === 'desc') {
+        filteredData.sort((a, b) => a[columnIndex].toLowerCase() < b[columnIndex].toLowerCase() ? -1 : 1);
+        sortOrder[columnIndex] = 'asc';
+    } else {
+        filteredData.sort((a, b) => a[columnIndex].toLowerCase() > b[columnIndex].toLowerCase() ? -1 : 1);
+        sortOrder[columnIndex] = 'desc';
     }
+
+    // Render the sorted data
+    const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';
+    filteredData.forEach(row => {
+        const newRow = tableBody.insertRow();
+        row.forEach((column, colIndex) => {
+            let cell = newRow.insertCell(colIndex);
+            cell.textContent = column.trim();
+            if (colIndex === 2) {
+                const bonusValue = parseInt(column.trim(), 10);
+                if (bonusValue === 5) {
+                    newRow.classList.add('bonus-5');
+                } else if (bonusValue === 8) {
+                    newRow.classList.add('bonus-8');
+                } else if (bonusValue === 11) {
+                    newRow.classList.add('bonus-11');
+                } else if (bonusValue === 18) {
+                    newRow.classList.add('bonus-18');
+                } else if (column.toLowerCase().includes('bag')) {
+                    newRow.classList.add('bonus-bags');
+                }
+            }
+        });
+    });
+}
+
 </script>
 
 </body>
