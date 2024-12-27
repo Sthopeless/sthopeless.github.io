@@ -12,6 +12,8 @@
             const display = document.getElementById("raceInfo");
             display.innerHTML = ""; // Clear previous entries
 
+            if (race.trim() === "") return; // Do nothing if no race is selected or typed
+
             rows.forEach(row => {
                 const cells = row.querySelectorAll("td");
                 if (cells[1].textContent.toLowerCase().includes(race)) {
