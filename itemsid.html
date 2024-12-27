@@ -6,21 +6,37 @@
     <title>CSV Table Viewer</title>
     <style>
         body {
+            background-color: #121212;
+            color: #e0e0e0;
             font-family: Arial, sans-serif;
-            margin: 20px;
+            font-size: 85%;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #333;
         }
         th, td {
-            border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #f4f4f4;
+            position: relative;
+            background-color: #444;
+        }
+        .bonus-5 {
+            background-color: #93c47d;
+        }
+        .bonus-8 {
+            background-color: #6aa84f;
+        }
+        .bonus-11 {
+            background-color: #6fa8dc;
+        }
+        .bonus-18 {
+            background-color: #3c78d8;
         }
     </style>
 </head>
@@ -39,10 +55,11 @@
     </table>
 
     <script>
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSecYguCSx0x8osbW_lp8X_U8HcDX8y_GkL9f-jTvoE1zBr5xZ0vlxtTDEn1HV0xPsQT8-5g6Ec2eAU/pub?gid=0&single=true&output=csv";
+
         async function loadCSV() {
-            const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSecYguCSx0x8osbW_lp8X_U8HcDX8y_GkL9f-jTvoE1zBr5xZ0vlxtTDEn1HV0xPsQT8-5g6Ec2eAU/pubhtml?gid=0&single=true";
             try {
-                const response = await fetch(url);
+                const response = await fetch(sheetUrl);
                 const csvText = await response.text();
                 const rows = csvText.split("\n").map(row => row.split(","));
 
@@ -51,10 +68,22 @@
 
                 rows.slice(1).forEach(row => {
                     const tr = document.createElement("tr");
-                    row.forEach(cell => {
+                    row.forEach((cell, index) => {
                         const td = document.createElement("td");
-                        td.textContent = cell;
+                        td.textContent = cell.trim();
                         tr.appendChild(td);
+                        if (index === 3) {
+                            const bonusValue = parseInt(cell.trim(), 10);
+                            if (bonusValue === 5) {
+                                tr.classList.add('bonus-5');
+                            } else if (bonusValue === 8) {
+                                tr.classList.add('bonus-8');
+                            } else if (bonusValue === 11) {
+                                tr.classList.add('bonus-11');
+                            } else if (bonusValue === 18) {
+                                tr.classList.add('bonus-18');
+                            }
+                        }
                     });
                     tbody.appendChild(tr);
                 });
