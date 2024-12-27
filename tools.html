@@ -136,8 +136,8 @@
             row.forEach((column, colIndex) => {
                 let cell = newRow.insertCell(colIndex);
                 cell.textContent = column.trim();
-                if (colIndex === 2) {
-                    const bonusValue = parseInt(column.trim(), 5); // Bonus Column
+                if (colIndex === 4) {
+                    const bonusValue = parseInt(column.trim(), 10); // Bonus Column
                     if (bonusValue === 5) {
                         newRow.classList.add('bonus-5');
                     } else if (bonusValue === 8) {
