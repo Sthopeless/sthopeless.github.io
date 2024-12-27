@@ -132,14 +132,14 @@
                 let cell = newRow.insertCell(colIndex);
                 cell.textContent = column.trim();
                 if (colIndex === 2) {
-                    const bonusValue = parseInt(column.trim(), 3); // Bonus Column
-                    if (bonusValue === 5) {
+                    const professionValue = parseInt(column.trim(), 3); // Bonus Column
+                    if (professionValue === 5) {
                         newRow.classList.add('bonus-5');
-                    } else if (bonusValue === 8) {
+                    } else if (professionValue === 8) {
                         newRow.classList.add('bonus-8');
-                    } else if (bonusValue === 11) {
+                    } else if (professionValue === 11) {
                         newRow.classList.add('bonus-11');
-                    } else if (bonusValue === 18) {
+                    } else if (professionValue === 18) {
                         newRow.classList.add('bonus-18');
                     } else if (column.toLowerCase().includes('bag')) {
                         newRow.classList.add('bonus-bags');
