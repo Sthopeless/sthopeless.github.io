@@ -34,7 +34,7 @@
             background-color: #66cc66; /* +5 */
         }
         .bonus-medium {
-            background-color: #4dff4d; /* +8 */
+            background-color: #27e027; /* +8 */
         }
         .bonus-blue-light {
             background-color: #3399ff; /* +11 */
@@ -51,6 +51,7 @@
 
 <h2>ToolsCrafters</h2>
 
+<input type="file" id="csvFile" accept=".csv">
 <table id="csvTable">
     <thead>
         <tr>
@@ -81,51 +82,50 @@
 </table>
 
 <script>
-    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1mMpjBJYrp2wlYb7XEd5TuK4fGxM6PeSpszxGQiUzxnY/edit?usp=sharing';
+    document.getElementById('csvFile').addEventListener('change', function(e) {
+        let file = e.target.files[0];
+        if (file && file.name.endsWith('.csv')) {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let csvData = event.target.result;
+                parseCSV(csvData);
+            };
+            reader.readAsText(file);
+        }
+    });
 
-    fetch(googleSheetUrl)
-        .then(response => response.json())
-        .then(data => {
-            const entries = data.feed.entry;
-            const allData = entries.map(entry => [
-                entry.gsx$item.$t,
-                entry.gsx$profession.$t,
-                entry.gsx$bonus.$t,
-                entry.gsx$crafter.$t,
-                entry.gsx$artisansacuity.$t,
-                entry.gsx$quality.$t,
-                entry.gsx$itemprofession.$t,
-                entry.gsx$conc.$t,
-                entry.gsx$materials.$t
-            ]);
-            parseCSVData(allData);
-        })
-        .catch(error => console.error('Error fetching Google Sheets data:', error));
-
-    function parseCSVData(allData) {
+    function parseCSV(csv) {
+        const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        
+        const headers = rows[0].split(',');
+
         tableBody.innerHTML = '';
-        allData.forEach(row => {
-            const newRow = tableBody.insertRow();
-            row.forEach((column, colIndex) => {
-                let cell = newRow.insertCell(colIndex);
-                cell.textContent = column.trim();
-                if (colIndex === 2) {
-                    const bonusValue = parseInt(column.trim(), 10);
-                    if (bonusValue === 5) {
-                        newRow.classList.add('bonus-low');
-                    } else if (bonusValue === 8) {
-                        newRow.classList.add('bonus-medium');
-                    } else if (bonusValue === 11) {
-                        newRow.classList.add('bonus-blue-light');
-                    } else if (bonusValue === 18) {
-                        newRow.classList.add('bonus-blue-dark');
-                    } else if (column.toLowerCase().includes('bags')) {
-                        newRow.classList.add('bonus-purple');
+        let allData = [];
+        rows.forEach((row, index) => {
+            if (index === 0) return;
+            const columns = row.split(',');
+            if (columns.length === 9) {
+                const newRow = tableBody.insertRow();
+                columns.forEach((column, colIndex) => {
+                    let cell = newRow.insertCell(colIndex);
+                    cell.textContent = column.trim();
+                    if (colIndex === 2) {
+                        const bonusValue = parseInt(column.trim(), 10);
+                        if (bonusValue === 5) {
+                            newRow.classList.add('bonus-low');
+                        } else if (bonusValue === 8) {
+                            newRow.classList.add('bonus-medium');
+                        } else if (bonusValue === 11) {
+                            newRow.classList.add('bonus-blue-light');
+                        } else if (bonusValue === 18) {
+                            newRow.classList.add('bonus-blue-dark');
+                        } else if (column.toLowerCase().includes('bags')) {
+                            newRow.classList.add('bonus-purple');
+                        }
                     }
-                }
-            });
+                });
+                allData.push(columns);
+            }
         });
 
         fillFilters(allData);
