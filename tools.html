@@ -8,46 +8,58 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #333;
+            color: white;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #444;
+            color: white;
         }
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #555;
             padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #4CAF50;
+            background-color: #555;
             color: white;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #666;
         }
         tr:hover {
-            background-color: #ddd;
+            background-color: #777;
         }
-        /* Custom styles for background based on Bonus */
         .bonus-5 {
-            background-color: #ffcccc; /* Light Red */
+            background-color: #d9534f; /* Light Red */
         }
         .bonus-8 {
-            background-color: #ffcc99; /* Light Orange */
+            background-color: #f0ad4e; /* Light Orange */
         }
         .bonus-11 {
-            background-color: #ffff99; /* Light Yellow */
+            background-color: #f0e68c; /* Light Yellow */
         }
         .bonus-18 {
-            background-color: #ccffcc; /* Light Green */
+            background-color: #5cb85c; /* Light Green */
+        }
+        #filterInput {
+            margin-bottom: 20px;
+            padding: 8px;
+            background-color: #555;
+            border: 1px solid #444;
+            color: white;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <h1>ToolsCrafters</h1>
-    <table>
+    <input type="text" id="filterInput" placeholder="Filter table by item name...">
+    
+    <table id="itemTable">
         <thead>
             <tr>
                 <th>Item</th>
@@ -62,10 +74,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr class="bonus-8">
                 <td>Hasty Alchemist's Mixing Rod</td>
                 <td>Alchemy</td>
-                <td class="bonus-8">+8</td>
+                <td>8</td>
                 <td>Dreadweaver</td>
                 <td>max iLvL</td>
                 <td>Inscription</td>
@@ -73,10 +85,10 @@
                 <td></td>
                 <td></td>
             </tr>
-            <tr>
+            <tr class="bonus-5">
                 <td>Apothecary's Cap</td>
                 <td>Alchemy</td>
-                <td class="bonus-5">+5</td>
+                <td>5</td>
                 <td>Xorapouco</td>
                 <td>max iLvL</td>
                 <td>Leatherworking</td>
@@ -84,10 +96,10 @@
                 <td></td>
                 <td></td>
             </tr>
-            <tr>
+            <tr class="bonus-11">
                 <td>Artisan Blacksmith's Toolbox</td>
                 <td>Blacksmith</td>
-                <td class="bonus-11">+11</td>
+                <td>11</td>
                 <td>Lightßringer</td>
                 <td>300</td>
                 <td>max iLvL</td>
@@ -95,10 +107,10 @@
                 <td></td>
                 <td>Ironclaw Alloy [R3] (4)</td>
             </tr>
-            <tr>
+            <tr class="bonus-18">
                 <td>Artisan Blacksmith's Hammer</td>
                 <td>Blacksmith</td>
-                <td class="bonus-18">+18</td>
+                <td>18</td>
                 <td>Lightßringer</td>
                 <td>300</td>
                 <td>max iLvL</td>
@@ -106,10 +118,10 @@
                 <td></td>
                 <td>Ironclaw Alloy [R3] (5)</td>
             </tr>
-            <tr>
+            <tr class="bonus-5">
                 <td>Weavercloth Alchemist's Robe</td>
                 <td>Alchemy</td>
-                <td class="bonus-5">+5</td>
+                <td>5</td>
                 <td>Ninjacore</td>
                 <td>max iLvL</td>
                 <td>Tailoring</td>
@@ -117,7 +129,26 @@
                 <td></td>
                 <td></td>
             </tr>
+            <!-- Add more rows as needed -->
         </tbody>
     </table>
+
+    <script>
+        document.getElementById('filterInput').addEventListener('input', function() {
+            let filter = this.value.toUpperCase();
+            let rows = document.querySelectorAll('#itemTable tbody tr');
+            rows.forEach(row => {
+                let cell = row.cells[0]; // Filter by the first column (Item)
+                if (cell) {
+                    let text = cell.textContent || cell.innerText;
+                    if (text.toUpperCase().indexOf(filter) > -1) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
