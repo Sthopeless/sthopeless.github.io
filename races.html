@@ -20,7 +20,7 @@
                     const profession = cells[0].textContent;
                     const bonus = cells[2].textContent;
                     const item = document.createElement("p");
-                    item.textContent = `Profession:${profession}`;
+                    item.textContent = `Profession: ${profession}`;
                     display.appendChild(item);
                     itemB.textContent = `Bonus:${bonus}`;
                     display.appendChild(itemB);
@@ -34,7 +34,7 @@
         <h1>Race Skills</h1>
         <div>
             <label for="raceDropdown">Select or Type Race: </label>
-            <input list="raceOptions" id="raceDropdown" oninput="updateDisplay()" placeholder="Enter or select race name...">
+            <input list="raceOptions" id="raceDropdown" placeholder="Enter or select race name...">
             <datalist id="raceOptions">
                 <option value="Goblin"></option>
                 <option value="Kul Tiran"></option>
