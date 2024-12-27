@@ -28,6 +28,15 @@
         th.sorted-desc::after {
             content: " 🔽";
         }
+        .bonus-low {
+            background-color: #ffcccc;
+        }
+        .bonus-medium {
+            background-color: #fff3cc;
+        }
+        .bonus-high {
+            background-color: #ccffcc;
+        }
     </style>
 </head>
 <body>
@@ -96,6 +105,17 @@
                 columns.forEach((column, colIndex) => {
                     let cell = newRow.insertCell(colIndex);
                     cell.textContent = column.trim();
+                    // Apply background color based on "Bonus" column
+                    if (colIndex === 2) { // Bonus column index is 2
+                        const bonusValue = parseInt(column.trim(), 10);
+                        if (bonusValue <= 5) {
+                            cell.classList.add('bonus-low');
+                        } else if (bonusValue <= 10) {
+                            cell.classList.add('bonus-medium');
+                        } else {
+                            cell.classList.add('bonus-high');
+                        }
+                    }
                 });
                 allData.push(columns);
             }
@@ -170,6 +190,17 @@
                 row.forEach((column, colIndex) => {
                     let cell = newRow.insertCell(colIndex);
                     cell.textContent = column.trim();
+                    // Apply background color based on "Bonus" column
+                    if (colIndex === 2) {
+                        const bonusValue = parseInt(column.trim(), 10);
+                        if (bonusValue <= 5) {
+                            cell.classList.add('bonus-low');
+                        } else if (bonusValue <= 10) {
+                            cell.classList.add('bonus-medium');
+                        } else {
+                            cell.classList.add('bonus-high');
+                        }
+                    }
                 });
             }
         });
@@ -204,6 +235,17 @@
             row.forEach((column, colIndex) => {
                 let cell = newRow.insertCell(colIndex);
                 cell.textContent = column.trim();
+                // Apply background color based on "Bonus" column
+                if (colIndex === 2) {
+                    const bonusValue = parseInt(column.trim(), 10);
+                    if (bonusValue <= 5) {
+                        cell.classList.add('bonus-low');
+                    } else if (bonusValue <= 10) {
+                        cell.classList.add('bonus-medium');
+                    } else {
+                        cell.classList.add('bonus-high');
+                    }
+                }
             });
         });
 
@@ -215,4 +257,3 @@
 
 </body>
 </html>
-
