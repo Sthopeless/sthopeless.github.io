@@ -81,27 +81,22 @@
 </table>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv';
+    const googleSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
+    let allData = [];
+    let sortOrder = {};
 
-    fetch(SHEET_URL)
+    fetch(googleSheetURL)
         .then(response => response.text())
-        .then(csvData => {
-            parseCSV(csvData);
-        })
-        .catch(error => {
-            console.error('Error fetching Google Sheet:', error);
-        });
+        .then(csvData => parseCSV(csvData))
+        .catch(error => console.error("Error fetching CSV:", error));
 
     function parseCSV(csv) {
         const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        const headers = rows[0].split(',');
 
-        tableBody.innerHTML = '';
-        let allData = [];
         rows.forEach((row, index) => {
-            if (index === 0) return;
             const columns = row.split(',');
+            if (index === 0) return;
             if (columns.length === 9) {
                 const newRow = tableBody.insertRow();
                 columns.forEach((column, colIndex) => {
@@ -127,8 +122,8 @@
         });
 
         fillFilters(allData);
-        attachFilterEvents(allData);
-        attachSortEvents(allData);
+        attachFilterEvents();
+        attachSortEvents();
     }
 
     function fillFilters(data) {
@@ -152,7 +147,7 @@
         });
     }
 
-    function attachFilterEvents(allData) {
+    function attachFilterEvents() {
         const filterSelectors = [
             'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
             'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
@@ -161,12 +156,12 @@
 
         filterSelectors.forEach((filter, index) => {
             document.getElementById(filter).addEventListener('change', function() {
-                filterTable(allData);
+                filterTable();
             });
         });
     }
 
-    function filterTable(allData) {
+    function filterTable() {
         const filters = [
             'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
             'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
@@ -176,61 +171,59 @@
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
         tableBody.innerHTML = '';
 
-        allData.forEach(row => {
-            let match = true;
-            filters.forEach((filter, index) => {
+        const filteredData = allData.filter(row => {
+            return filters.every((filter, index) => {
                 const filterValue = document.getElementById(filter).value;
-                if (filterValue && row[index].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
-                    match = false;
-                }
+                return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
             });
-            if (match) {
-                const newRow = tableBody.insertRow();
-                row.forEach((column, colIndex) => {
-                    let cell = newRow.insertCell(colIndex);
-                    cell.textContent = column.trim();
-                    if (colIndex === 2) {
-                        const bonusValue = parseInt(column.trim(), 10);
-                        if (bonusValue === 5) {
-                            newRow.classList.add('bonus-5');
-                        } else if (bonusValue === 8) {
-                            newRow.classList.add('bonus-8');
-                        } else if (bonusValue === 11) {
-                            newRow.classList.add('bonus-11');
-                        } else if (bonusValue === 18) {
-                            newRow.classList.add('bonus-18');
-                        } else if (column.toLowerCase().includes('bag')) {
-                            newRow.classList.add('bonus-bags');
-                        }
-                    }
-                });
-            }
         });
+
+        renderTable(filteredData);
     }
 
-    function attachSortEvents(allData) {
+    function attachSortEvents() {
         const tableHeaders = document.querySelectorAll('th');
         tableHeaders.forEach((header, index) => {
             header.addEventListener('click', function() {
-                sortTable(index, allData);
+                sortTable(index);
             });
         });
     }
 
-    function sortTable(columnIndex, allData) {
+    function sortTable(columnIndex) {
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        const sortedData = [...allData];
 
-        sortedData.sort((a, b) => {
+        if (!sortOrder[columnIndex]) {
+            sortOrder[columnIndex] = 'asc';
+        } else {
+            sortOrder[columnIndex] = sortOrder[columnIndex] === 'asc' ? 'desc' : 'asc';
+        }
+
+        const filteredData = allData.filter(row => {
+            return Array.from(document.querySelectorAll('select')).every((select, index) => {
+                const filterValue = select.value;
+                return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
+            });
+        });
+
+        filteredData.sort((a, b) => {
             const valueA = a[columnIndex].toLowerCase();
             const valueB = b[columnIndex].toLowerCase();
-            if (valueA < valueB) return -1;
-            if (valueA > valueB) return 1;
-            return 0;
+
+            if (sortOrder[columnIndex] === 'asc') {
+                return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+            } else {
+                return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
+            }
         });
 
         tableBody.innerHTML = '';
-        sortedData.forEach(row => {
+        renderTable(filteredData);
+    }
+
+    function renderTable(data) {
+        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
+        data.forEach(row => {
             const newRow = tableBody.insertRow();
             row.forEach((column, colIndex) => {
                 let cell = newRow.insertCell(colIndex);
