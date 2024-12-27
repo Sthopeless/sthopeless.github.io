@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lua File Table Viewer</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+        .filter {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lua File Table Viewer</h1>
+    <input type="file" id="fileInput" class="filter" accept=".lua,.bak" />
+    <input type="text" id="searchInput" class="filter" placeholder="Search...">
+    <table id="dataTable">
+        <thead>
+            <tr id="tableHeaders"></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', handleFile);
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const parsedData = parseLua(content);
+                if (parsedData.length) {
+                    createTable(parsedData);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseLua(content) {
+            const rows = [];
+            // A simple Lua table-like parser (assuming key-value pairs or similar structure)
+            const regex = /\["']?([^"'\]]+)["']?\]\s*=\s*["']?([^,\n]+)["']?/g;
+            let match;
+            while ((match = regex.exec(content)) !== null) {
+                rows.push({ key: match[1], value: match[2] });
+            }
+            return rows;
+        }
+
+        function createTable(data) {
+            const tableHeaders = document.getElementById('tableHeaders');
+            const tableBody = document.querySelector('#dataTable tbody');
+
+            // Clear any existing content
+            tableHeaders.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            // Set headers
+            ['Key', 'Value'].forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                tableHeaders.appendChild(th);
+            });
+
+            // Populate rows
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${row.key}</td><td>${row.value}</td>`;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function filterTable(event) {
+            const filter = event.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const match = Array.from(cells).some(cell =>
+                    cell.textContent.toLowerCase().includes(filter)
+                );
+                row.style.display = match ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>
