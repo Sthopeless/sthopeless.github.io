@@ -21,14 +21,38 @@
             padding: 8px;
             text-align: left;
         }
-        th select {
-            width: 100%;
-            background-color: #333;
-            color: #e0e0e0;
-        }
         th {
+            position: relative;
             cursor: pointer;
             background-color: #444;
+        }
+        .filter-window {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            padding: 10px;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 200px;
+        }
+        .filter-window ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .filter-window li {
+            margin-bottom: 5px;
+        }
+        .filter-window input {
+            margin-right: 5px;
+        }
+        .filter-icon {
+            cursor: pointer;
+            margin-left: 5px;
+            color: #aaa;
         }
         .bonus-5 {
             background-color: #93c47d; /* +5 */
@@ -54,26 +78,15 @@
 <table id="csvTable">
     <thead>
         <tr>
-            <th>Item</th>
-            <th>Profession</th>
-            <th>Bonus</th>
-            <th>Crafter</th>
-            <th>Artisan's Acuity</th>
-            <th>Quality</th>
-            <th>Item Profession</th>
-            <th>Conc</th>
-            <th>Materials</th>
-        </tr>
-        <tr>
-            <th><select id="filterItem" multiple></select></th>
-            <th><select id="filterProfession" multiple></select></th>
-            <th><select id="filterBonus" multiple></select></th>
-            <th><select id="filterCrafter" multiple></select></th>
-            <th><select id="filterArtisansAcuity" multiple></select></th>
-            <th><select id="filterQuality" multiple></select></th>
-            <th><select id="filterItemProfession" multiple></select></th>
-            <th><select id="filterConc" multiple></select></th>
-            <th><select id="filterMaterials" multiple></select></th>
+            <th>Item <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Profession <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Bonus <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Crafter <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Artisan's Acuity <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Quality <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Item Profession <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Conc <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>Materials <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
         </tr>
     </thead>
     <tbody>
@@ -104,8 +117,7 @@
         });
 
         renderTable(allData);
-        fillFilters(allData);
-        attachFilterEvents();
+        setupFilters(allData);
         attachSortEvents();
     }
 
@@ -136,60 +148,45 @@
         });
     }
 
-    function fillFilters(data) {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach((filter, index) => {
+    function setupFilters(data) {
+        const headers = document.querySelectorAll('thead tr:first-child th');
+        headers.forEach((header, index) => {
+            const filterWindow = header.querySelector('.filter-window');
             const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
-            const select = document.getElementById(filter);
-            select.innerHTML = '<option value="">All</option>';
 
+            const filterContent = document.createElement('ul');
             uniqueValues.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                select.appendChild(option);
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<label><input type="checkbox" value="${value}"> ${value}</label>`;
+                filterContent.appendChild(listItem);
+            });
+            const applyButton = document.createElement('button');
+            applyButton.textContent = 'Apply';
+            applyButton.addEventListener('click', () => applyFilters(index));
+
+            filterWindow.appendChild(filterContent);
+            filterWindow.appendChild(applyButton);
+
+            header.querySelector('.filter-icon').addEventListener('click', () => {
+                const isOpen = filterWindow.style.display === 'block';
+                document.querySelectorAll('.filter-window').forEach(win => win.style.display = 'none'); // Close others
+                filterWindow.style.display = isOpen ? 'none' : 'block';
             });
         });
     }
 
-    function attachFilterEvents() {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach(filter => {
-            document.getElementById(filter).addEventListener('change', filterTable);
-        });
-    }
-
-    function filterTable() {
-        const filters = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession',
-            'filterConc', 'filterMaterials'
-        ];
+    function applyFilters(columnIndex) {
+        const headers = document.querySelectorAll('thead tr:first-child th');
+        const filterWindow = headers[columnIndex].querySelector('.filter-window');
+        const selectedValues = Array.from(filterWindow.querySelectorAll('input:checked')).map(input => input.value.toLowerCase());
 
         const filteredData = allData.filter(row => {
-            return filters.every((filter, index) => {
-                const select = document.getElementById(filter);
-                const selectedOptions = Array.from(select.selectedOptions).map(opt => opt.value.toLowerCase());
-
-                if (selectedOptions.length === 0 || selectedOptions.includes("")) {
-                    return true;
-                }
-                const cellValue = row[index].toLowerCase();
-                return selectedOptions.some(selectedValue => cellValue.includes(selectedValue));
-            });
+            const cellValue = row[columnIndex].toLowerCase();
+            return selectedValues.length === 0 || selectedValues.includes(cellValue);
         });
 
         renderTable(filteredData);
+        filterWindow.style.display = 'none'; // Close the filter window after applying
     }
 
     function attachSortEvents() {
@@ -200,13 +197,13 @@
     }
 
     function sortTable(columnIndex) {
-        const sortedData = [...allData].sort((a, b) => {
+        allData.sort((a, b) => {
             const valueA = a[columnIndex].toLowerCase();
             const valueB = b[columnIndex].toLowerCase();
             return valueA.localeCompare(valueB);
         });
 
-        renderTable(sortedData);
+        renderTable(allData);
     }
 </script>
 
