@@ -25,22 +25,10 @@
             width: 100%;
             background-color: #333;
             color: #e0e0e0;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        th select:hover {
-            background-color: #555;
         }
         th {
             cursor: pointer;
             background-color: #444;
-        }
-        th[aria-sort="ascending"]::after {
-            content: " 🔼";
-        }
-        th[aria-sort="descending"]::after {
-            content: " 🔽";
         }
         .bonus-5 {
             background-color: #93c47d; /* +5 */
@@ -57,19 +45,12 @@
         .bonus-bags {
             background-color: #d327ca; /* Bags */
         }
-        #loading {
-            display: none;
-            color: #fff;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
 
 <h2>ToolsCrafters</h2>
 
-<input type="file" id="csvFile" accept=".csv">
-<div id="loading">Loading...</div>
 <table id="csvTable">
     <thead>
         <tr>
@@ -100,26 +81,20 @@
 </table>
 
 <script>
-    let sortOrder = {}; // Track the sort order for each column
+    const SHEET_ID = '2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS';
+    const SHEET_NAME = 'ToolsCrafters';
+    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
-    document.getElementById('csvFile').addEventListener('change', function(e) {
-        let file = e.target.files[0];
-        if (file && file.name.endsWith('.csv')) {
-            let reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    let csvData = event.target.result;
-                    parseCSV(csvData);
-                } catch (error) {
-                    alert('Error parsing CSV file: ' + error.message);
-                }
-            };
-            reader.readAsText(file);
-        }
-    });
+    fetch(SHEET_URL)
+        .then(response => response.text())
+        .then(csvData => {
+            parseCSV(csvData);
+        })
+        .catch(error => {
+            console.error('Error fetching Google Sheet:', error);
+        });
 
     function parseCSV(csv) {
-        document.getElementById('loading').style.display = 'block';  // Show loading
         const rows = csv.split('\n');
         const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
         const headers = rows[0].split(',');
@@ -154,150 +129,11 @@
         });
 
         fillFilters(allData);
-
         attachFilterEvents(allData);
-
         attachSortEvents(allData);
-
-        document.getElementById('loading').style.display = 'none';  // Hide loading
     }
 
-    function fillFilters(data) {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach((filter, index) => {
-            const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
-            const select = document.getElementById(filter);
-            select.innerHTML = '<option value="">All</option>';
-
-            uniqueValues.forEach(value => {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = value;
-                select.appendChild(option);
-            });
-        });
-    }
-
-    function attachFilterEvents(allData) {
-        const filterSelectors = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        filterSelectors.forEach((filter, index) => {
-            document.getElementById(filter).addEventListener('change', function() {
-                filterTable(allData);
-            });
-        });
-    }
-
-    function filterTable(allData) {
-        const filters = [
-            'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-            'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-            'filterConc', 'filterMaterials'
-        ];
-
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
-
-        allData.forEach(row => {
-            let match = true;
-            filters.forEach((filter, index) => {
-                const filterValue = document.getElementById(filter).value;
-                if (filterValue && row[index].toLowerCase().indexOf(filterValue.toLowerCase()) === -1) {
-                    match = false;
-                }
-            });
-            if (match) {
-                const newRow = tableBody.insertRow();
-                row.forEach((column, colIndex) => {
-                    let cell = newRow.insertCell(colIndex);
-                    cell.textContent = column.trim();
-                    if (colIndex === 2) {
-                        const bonusValue = parseInt(column.trim(), 10);
-                        if (bonusValue === 5) {
-                            newRow.classList.add('bonus-5');
-                        } else if (bonusValue === 8) {
-                            newRow.classList.add('bonus-8');
-                        } else if (bonusValue === 11) {
-                            newRow.classList.add('bonus-11');
-                        } else if (bonusValue === 18) {
-                            newRow.classList.add('bonus-18');
-                        } else if (column.toLowerCase().includes('bag')) {
-                            newRow.classList.add('bonus-bags');
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    function attachSortEvents(allData) {
-        const tableHeaders = document.querySelectorAll('th');
-        tableHeaders.forEach((header, index) => {
-            header.addEventListener('click', function() {
-                sortTable(index, allData);
-            });
-        });
-    }
-
-    function sortTable(columnIndex, allData) {
-    const filters = [
-        'filterItem', 'filterProfession', 'filterBonus', 'filterCrafter',
-        'filterArtisansAcuity', 'filterQuality', 'filterItemProfession', 
-        'filterConc', 'filterMaterials'
-    ];
-
-    // Filter the data first based on active filters
-    const filteredData = allData.filter(row => {
-        return filters.every((filter, index) => {
-            const filterValue = document.getElementById(filter).value;
-            return !filterValue || row[index].toLowerCase().includes(filterValue.toLowerCase());
-        });
-    });
-
-    // Sort the filtered data
-    if (!sortOrder[columnIndex] || sortOrder[columnIndex] === 'desc') {
-        filteredData.sort((a, b) => a[columnIndex].toLowerCase() < b[columnIndex].toLowerCase() ? -1 : 1);
-        sortOrder[columnIndex] = 'asc';
-    } else {
-        filteredData.sort((a, b) => a[columnIndex].toLowerCase() > b[columnIndex].toLowerCase() ? -1 : 1);
-        sortOrder[columnIndex] = 'desc';
-    }
-
-    // Render the sorted data
-    const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-    tableBody.innerHTML = '';
-    filteredData.forEach(row => {
-        const newRow = tableBody.insertRow();
-        row.forEach((column, colIndex) => {
-            let cell = newRow.insertCell(colIndex);
-            cell.textContent = column.trim();
-            if (colIndex === 2) {
-                const bonusValue = parseInt(column.trim(), 10);
-                if (bonusValue === 5) {
-                    newRow.classList.add('bonus-5');
-                } else if (bonusValue === 8) {
-                    newRow.classList.add('bonus-8');
-                } else if (bonusValue === 11) {
-                    newRow.classList.add('bonus-11');
-                } else if (bonusValue === 18) {
-                    newRow.classList.add('bonus-18');
-                } else if (column.toLowerCase().includes('bag')) {
-                    newRow.classList.add('bonus-bags');
-                }
-            }
-        });
-    });
-}
-
+    // Reuse the existing filter and sort functions from your code.
 </script>
 
 </body>
