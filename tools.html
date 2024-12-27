@@ -196,15 +196,15 @@
                     if (colIndex === 2) {
                         const bonusValue = parseInt(column.trim(), 10);
                         if (bonusValue === 5) {
-                            newRow.classList.add('bonus-low');
+                            newRow.classList.add('bonus-5');
                         } else if (bonusValue === 8) {
-                            newRow.classList.add('bonus-medium');
+                            newRow.classList.add('bonus-8');
                         } else if (bonusValue === 11) {
-                            newRow.classList.add('bonus-blue-light');
+                            newRow.classList.add('bonus-11');
                         } else if (bonusValue === 18) {
-                            newRow.classList.add('bonus-blue-dark');
-                        } else if (column.toLowerCase().includes('bags')) {
-                            newRow.classList.add('bonus-purple');
+                            newRow.classList.add('bonus-18');
+                        } else if (column.toLowerCase().includes('bag')) {
+                            newRow.classList.add('bonus-bags');
                         }
                     }
                 });
@@ -242,15 +242,15 @@
                 if (colIndex === 2) {
                     const bonusValue = parseInt(column.trim(), 10);
                     if (bonusValue === 5) {
-                        newRow.classList.add('bonus-low');
+                        newRow.classList.add('bonus-5');
                     } else if (bonusValue === 8) {
-                        newRow.classList.add('bonus-medium');
+                        newRow.classList.add('bonus-8');
                     } else if (bonusValue === 11) {
-                        newRow.classList.add('bonus-blue-light');
+                        newRow.classList.add('bonus-11');
                     } else if (bonusValue === 18) {
-                        newRow.classList.add('bonus-blue-dark');
-                    } else if (column.toLowerCase().includes('bags')) {
-                        newRow.classList.add('bonus-purple');
+                        newRow.classList.add('bonus-18');
+                    } else if (column.toLowerCase().includes('bag')) {
+                        newRow.classList.add('bonus-bags');
                     }
                 }
             });
