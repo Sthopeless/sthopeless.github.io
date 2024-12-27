@@ -3,211 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>itemsID</title>
+    <title>CSV Table Viewer</title>
     <style>
         body {
-            background-color: #121212;
-            color: #e0e0e0;
             font-family: Arial, sans-serif;
-            font-size: 85%;
+            margin: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #333;
+            margin-top: 20px;
         }
         th, td {
+            border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
         th {
-            position: relative;
-            background-color: #444;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        .filter-window {
-            display: none;
-            position: absolute;
-            background-color: #333;
-            color: #e0e0e0;
-            border: 1px solid #555;
-            padding: 10px;
-            z-index: 1000;
-            max-height: 200px;
-            overflow-y: auto;
-            width: 200px;
-        }
-        .filter-window ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        .filter-window li {
-            margin-bottom: 5px;
-        }
-        .filter-window input {
-            margin-right: 5px;
-        }
-        .filter-icon {
-            cursor: pointer;
-            margin-left: 5px;
-            color: #aaa;
-        }
-        .bonus-5 {
-            background-color: #93c47d;
-        }
-        .bonus-8 {
-            background-color: #6aa84f;
-        }
-        .bonus-11 {
-            background-color: #6fa8dc;
-        }
-        .bonus-18 {
-            background-color: #3c78d8;
-        }
-        .bonus-bags {
-            background-color: #d327ca;
+            background-color: #f4f4f4;
         }
     </style>
 </head>
 <body>
+    <h1>CSV Table Viewer</h1>
+    <table id="csv-table">
+        <thead>
+            <tr>
+                <th>PROFESSION</th>
+                <th>RECIPE</th>
+                <th>RECIPE ID</th>
+                <th>ABILITY ID</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-<h2>itemsID</h2>
+    <script>
+        async function loadCSV() {
+            const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSecYguCSx0x8osbW_lp8X_U8HcDX8y_GkL9f-jTvoE1zBr5xZ0vlxtTDEn1HV0xPsQT8-5g6Ec2eAU/pubhtml?gid=0&single=true";
+            try {
+                const response = await fetch(url);
+                const csvText = await response.text();
+                const rows = csvText.split("\n").map(row => row.split(","));
 
-<table id="csvTable">
-    <thead>
-        <tr>
-            <th>PROFESSION <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>RECIPE <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>RECIPE ID <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>ABILITY ID <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+                const tbody = document.querySelector("#csv-table tbody");
+                tbody.innerHTML = "";
 
-<script>
-    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSecYguCSx0x8osbW_lp8X_U8HcDX8y_GkL9f-jTvoE1zBr5xZ0vlxtTDEn1HV0xPsQT8-5g6Ec2eAU/pub?gid=0&single=true&output=csv";
-    let allData = [];
-    let filteredData = [];
-    let sortDirections = new Array(9).fill(true);  // To toggle sorting directions
-
-    window.onload = function() {
-        fetch(sheetUrl)
-            .then(response => response.text())
-            .then(data => parseCSV(data))
-            .catch(error => console.error('Error fetching the Google Sheet:', error));
-    };
-
-    function parseCSV(csv) {
-        const rows = csv.split('\n');
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-
-        rows.forEach((row, index) => {
-            if (index === 0) return; // Skip header row
-            const columns = row.split(',');
-            if (columns.length === 9) {
-                allData.push(columns); // Save data for filtering/sorting
+                rows.slice(1).forEach(row => {
+                    const tr = document.createElement("tr");
+                    row.forEach(cell => {
+                        const td = document.createElement("td");
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error("Error loading CSV:", error);
             }
-        });
+        }
 
-        filteredData = [...allData]; // Initialize filtered data
-        renderTable(filteredData);
-        setupFilters(allData);
-        attachSortEvents();
-    }
-
-    function renderTable(data) {
-        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
-        tableBody.innerHTML = '';
-
-        data.forEach(row => {
-            const newRow = tableBody.insertRow();
-            row.forEach((column, colIndex) => {
-                let cell = newRow.insertCell(colIndex);
-                cell.textContent = column.trim();
-                if (colIndex === 2) {
-                    const professionValue = parseInt(column.trim(), 3); // Bonus Column
-                    if (professionValue === 5) {
-                        newRow.classList.add('bonus-5');
-                    } else if (professionValue === 8) {
-                        newRow.classList.add('bonus-8');
-                    } else if (professionValue === 11) {
-                        newRow.classList.add('bonus-11');
-                    } else if (professionValue === 18) {
-                        newRow.classList.add('bonus-18');
-                    } else if (column.toLowerCase().includes('bag')) {
-                        newRow.classList.add('bonus-bags');
-                    }
-                }
-            });
-        });
-    }
-
-    function setupFilters(data) {
-        const headers = document.querySelectorAll('thead tr:first-child th');
-        headers.forEach((header, index) => {
-            const filterWindow = header.querySelector('.filter-window');
-            const uniqueValues = Array.from(new Set(data.map(row => row[index]))).sort();
-
-            const filterContent = document.createElement('ul');
-            uniqueValues.forEach(value => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<label><input type="checkbox" value="${value}"> ${value}</label>`;
-                filterContent.appendChild(listItem);
-            });
-            const applyButton = document.createElement('button');
-            applyButton.textContent = 'Apply';
-            applyButton.addEventListener('click', () => applyFilters(index));
-
-            filterWindow.appendChild(filterContent);
-            filterWindow.appendChild(applyButton);
-
-            header.querySelector('.filter-icon').addEventListener('click', () => {
-                const isOpen = filterWindow.style.display === 'block';
-                document.querySelectorAll('.filter-window').forEach(win => win.style.display = 'none'); // Close others
-                filterWindow.style.display = isOpen ? 'none' : 'block';
-            });
-        });
-    }
-
-    function applyFilters(columnIndex) {
-        const headers = document.querySelectorAll('thead tr:first-child th');
-        const filterWindow = headers[columnIndex].querySelector('.filter-window');
-        const selectedValues = Array.from(filterWindow.querySelectorAll('input:checked')).map(input => input.value.toLowerCase());
-
-        filteredData = allData.filter(row => {
-            const cellValue = row[columnIndex].toLowerCase();
-            return selectedValues.length === 0 || selectedValues.includes(cellValue);
-        });
-
-        renderTable(filteredData);
-        filterWindow.style.display = 'none'; // Close the filter window after applying
-    }
-
-    function attachSortEvents() {
-        const tableHeaders = document.querySelectorAll('thead tr:first-child th');
-        tableHeaders.forEach((header, index) => {
-            header.addEventListener('click', () => toggleSort(index));
-        });
-    }
-
-    function toggleSort(columnIndex) {
-        sortDirections[columnIndex] = !sortDirections[columnIndex]; // Toggle direction
-        const sortedData = [...filteredData].sort((a, b) => {
-            const valueA = a[columnIndex].toLowerCase();
-            const valueB = b[columnIndex].toLowerCase();
-            return sortDirections[columnIndex] ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-        });
-
-        renderTable(sortedData);
-    }
-</script>
-
+        document.addEventListener("DOMContentLoaded", loadCSV);
+    </script>
 </body>
 </html>
