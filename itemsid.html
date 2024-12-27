@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToolsCrafters</title>
+    <title>itemsID</title>
     <style>
         body {
             background-color: #121212;
@@ -76,20 +76,15 @@
 </head>
 <body>
 
-<h2>ToolsCrafters</h2>
+<h2>itemsID</h2>
 
 <table id="csvTable">
     <thead>
         <tr>
-            <th>Crafter <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Item <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Profession <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Bonus <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Artisan's Acuity <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Quality <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Item Profession <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Conc <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
-            <th>Materials <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>PROFESSION <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>RECIPE <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>RECIPE ID <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
+            <th>ABILITY ID <span class="filter-icon">🔽</span><div class="filter-window"></div></th>
         </tr>
     </thead>
     <tbody>
@@ -97,7 +92,7 @@
 </table>
 
 <script>
-    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSecYguCSx0x8osbW_lp8X_U8HcDX8y_GkL9f-jTvoE1zBr5xZ0vlxtTDEn1HV0xPsQT8-5g6Ec2eAU/pub?gid=0&single=true&output=csv";
     let allData = [];
     let filteredData = [];
     let sortDirections = new Array(9).fill(true);  // To toggle sorting directions
