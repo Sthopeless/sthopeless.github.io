@@ -99,6 +99,7 @@
 <script>
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
     let allData = [];
+    let filteredData = [];
     let sortDirections = new Array(9).fill(true);  // To toggle sorting directions
 
     window.onload = function() {
@@ -120,7 +121,8 @@
             }
         });
 
-        renderTable(allData);
+        filteredData = [...allData]; // Initialize filtered data
+        renderTable(filteredData);
         setupFilters(allData);
         attachSortEvents();
     }
@@ -184,7 +186,7 @@
         const filterWindow = headers[columnIndex].querySelector('.filter-window');
         const selectedValues = Array.from(filterWindow.querySelectorAll('input:checked')).map(input => input.value.toLowerCase());
 
-        const filteredData = allData.filter(row => {
+        filteredData = allData.filter(row => {
             const cellValue = row[columnIndex].toLowerCase();
             return selectedValues.length === 0 || selectedValues.includes(cellValue);
         });
@@ -202,7 +204,7 @@
 
     function toggleSort(columnIndex) {
         sortDirections[columnIndex] = !sortDirections[columnIndex]; // Toggle direction
-        const sortedData = [...allData].sort((a, b) => {
+        const sortedData = [...filteredData].sort((a, b) => {
             const valueA = a[columnIndex].toLowerCase();
             const valueB = b[columnIndex].toLowerCase();
             return sortDirections[columnIndex] ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
