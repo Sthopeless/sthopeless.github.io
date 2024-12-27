@@ -9,7 +9,7 @@
             background-color: #121212;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
-            font-size: 90%;
+            font-size: 85%;
         }
         table {
             width: 100%;
@@ -26,8 +26,8 @@
             position: relative;
             background-color: #444;
             /* display: flex; */
-            justify-content: space-between; Ensures the filter icon is on the right
-            align-items: center;          /* Vertically centers text and icon */
+            justify-content: space-between;
+            align-items: center;
             cursor: pointer;
         }
         .filter-window {
@@ -59,19 +59,19 @@
             color: #aaa;
         }
         .bonus-5 {
-            background-color: #93c47d; /* +5 */
+            background-color: #93c47d;
         }
         .bonus-8 {
-            background-color: #6aa84f; /* +8 */
+            background-color: #6aa84f;
         }
         .bonus-11 {
-            background-color: #6fa8dc; /* +11 */
+            background-color: #6fa8dc;
         }
         .bonus-18 {
-            background-color: #3c78d8; /* +18 */
+            background-color: #3c78d8;
         }
         .bonus-bags {
-            background-color: #d327ca; /* Bags */
+            background-color: #d327ca;
         }
     </style>
 </head>
@@ -100,6 +100,7 @@
 <script>
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSeGTMGg-K1PYdE-0VEtmEFbJfsjBJAmrw5hylQAYDuFJX-TIGenqL52Q4fwGN7C3LiXJTrVdg2MUBS/pub?gid=0&single=true&output=csv";
     let allData = [];
+    let sortDirections = new Array(9).fill(true);  // To toggle sorting directions
 
     window.onload = function() {
         fetch(sheetUrl)
@@ -196,18 +197,19 @@
     function attachSortEvents() {
         const tableHeaders = document.querySelectorAll('thead tr:first-child th');
         tableHeaders.forEach((header, index) => {
-            header.addEventListener('click', () => sortTable(index));
+            header.addEventListener('click', () => toggleSort(index));
         });
     }
 
-    function sortTable(columnIndex) {
-        allData.sort((a, b) => {
+    function toggleSort(columnIndex) {
+        sortDirections[columnIndex] = !sortDirections[columnIndex]; // Toggle direction
+        const sortedData = [...allData].sort((a, b) => {
             const valueA = a[columnIndex].toLowerCase();
             const valueB = b[columnIndex].toLowerCase();
-            return valueA.localeCompare(valueB);
+            return sortDirections[columnIndex] ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
         });
 
-        renderTable(allData);
+        renderTable(sortedData);
     }
 </script>
 
