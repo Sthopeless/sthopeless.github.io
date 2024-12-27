@@ -5,272 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToolsCrafters</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #333;
-            color: white;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background-color: #444;
-            color: white;
+        }
+        table, th, td {
+            border: 1px solid black;
         }
         th, td {
-            border: 1px solid #555;
             padding: 8px;
             text-align: left;
-        }
-        th {
-            background-color: #555;
-            color: white;
-            position: relative;
-        }
-        tr:nth-child(even) {
-            background-color: #666;
-        }
-        tr:hover {
-            background-color: #777;
-        }
-        .bonus-5 {
-            background-color: #d9534f; /* Light Red */
-        }
-        .bonus-8 {
-            background-color: #f0ad4e; /* Light Orange */
-        }
-        .bonus-11 {
-            background-color: #f0e68c; /* Light Yellow */
-        }
-        .bonus-18 {
-            background-color: #5cb85c; /* Light Green */
-        }
-        input.filter-input {
-            padding: 5px;
-            margin-top: 5px;
-            background-color: #555;
-            border: 1px solid #444;
-            color: white;
-            width: 100%;
-        }
-        th input.filter-input {
-            width: 80%;
-            margin: 0;
         }
     </style>
 </head>
 <body>
-    <h1>ToolsCrafters</h1>
-    
-    <table id="itemTable">
-        <thead>
-            <tr>
-                <th>Item <input type="text" class="filter-input" placeholder="Filter by Item" oninput="filterTable()"></th>
-                <th>Profession <input type="text" class="filter-input" placeholder="Filter by Profession" oninput="filterTable()"></th>
-                <th>Bonus <input type="text" class="filter-input" placeholder="Filter by Bonus" oninput="filterTable()"></th>
-                <th>Crafter <input type="text" class="filter-input" placeholder="Filter by Crafter" oninput="filterTable()"></th>
-                <th>Artisan's Acuity <input type="text" class="filter-input" placeholder="Filter by Acuity" oninput="filterTable()"></th>
-                <th>Quality <input type="text" class="filter-input" placeholder="Filter by Quality" oninput="filterTable()"></th>
-                <th>Item Profession <input type="text" class="filter-input" placeholder="Filter by Item Profession" oninput="filterTable()"></th>
-                <th>Conc <input type="text" class="filter-input" placeholder="Filter by Conc" oninput="filterTable()"></th>
-                <th>Materials <input type="text" class="filter-input" placeholder="Filter by Materials" oninput="filterTable()"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bonus-8">
-                <td>Hasty Alchemist's Mixing Rod</td>
-                <td>Alchemy</td>
-                <td>8</td>
-                <td>Dreadweaver</td>
-                <td>max iLvL</td>
-                <td>Inscription</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-5">
-                <td>Apothecary's Cap</td>
-                <td>Alchemy</td>
-                <td>5</td>
-                <td>Xorapouco</td>
-                <td>max iLvL</td>
-                <td>Leatherworking</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-11">
-                <td>Artisan Blacksmith's Toolbox</td>
-                <td>Blacksmith</td>
-                <td>11</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td>Ironclaw Alloy [R3] (4)</td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Blacksmith's Hammer</td>
-                <td>Blacksmith</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td>Ironclaw Alloy [R3] (5)</td>
-            </tr>
-            <tr class="bonus-5">
-                <td>Weavercloth Alchemist's Robe</td>
-                <td>Alchemy</td>
-                <td>5</td>
-                <td>Ninjacore</td>
-                <td>max iLvL</td>
-                <td>Tailoring</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Sickle</td>
-                <td>Herbalism</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-11">
-                <td>Artisan Leatherworker's Toolset</td>
-                <td>Leatherworking</td>
-                <td>11</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Leatherworker's Knife</td>
-                <td>Leatherworking</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-5">
-                <td>Proficient Blacksmith's Toolbox</td>
-                <td>Blacksmith</td>
-                <td>5</td>
-                <td>Lightßringer</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Pickaxe</td>
-                <td>Mining</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-8">
-                <td>Proficient Blacksmith's Hammer</td>
-                <td>Blacksmith</td>
-                <td>8</td>
-                <td>Lightßringer</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Skinning Knife</td>
-                <td>Skinning</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td>Ironclaw Alloy [R3] (5); Unraveled Instructions</td>
-                <td></td>
-            </tr>
-            <tr class="bonus-11">
-                <td>Artisan Needle Set</td>
-                <td>Tailoring</td>
-                <td>11</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td>Ironclaw Alloy [R3] (5); Unraveled Instructions</td>
-                <td></td>
-            </tr>
-            <tr class="bonus-5">
-                <td>Steelsmith's Apron</td>
-                <td>Blacksmith</td>
-                <td>5</td>
-                <td>Xorapouco</td>
-                <td>max iLvL</td>
-                <td>Leatherworking</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="bonus-18">
-                <td>Artisan Forger's Tongs</td>
-                <td>Blacksmith</td>
-                <td>18</td>
-                <td>Lightßringer</td>
-                <td>300</td>
-                <td>max iLvL</td>
-                <td>Blacksmith</td>
-                <td>Ironclaw Alloy [R3] (5); Unraveled Instructions</td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
 
-    <script>
-        function filterTable() {
-            let rows = document.querySelectorAll('#itemTable tbody tr');
-            let filters = document.querySelectorAll('.filter-input');
-            
-            rows.forEach(row => {
-                let cells = row.getElementsByTagName('td');
-                let showRow = true;
+<h2>ToolsCrafters</h2>
 
-                for (let i = 0; i < filters.length; i++) {
-                    let filterValue = filters[i].value.toUpperCase();
-                    let cellText = cells[i] ? cells[i].textContent || cells[i].innerText : '';
-                    if (cellText.toUpperCase().indexOf(filterValue) === -1) {
-                        showRow = false;
-                        break;
-                    }
-                }
+<input type="file" id="csvFile" accept=".csv">
+<table id="csvTable">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Profession</th>
+            <th>Bonus</th>
+            <th>Crafter</th>
+            <th>Artisan's Acuity</th>
+            <th>Quality</th>
+            <th>Item Profession</th>
+            <th>Conc</th>
+            <th>Materials</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be inserted here -->
+    </tbody>
+</table>
 
-                if (showRow) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+<script>
+    // Function to handle CSV file upload
+    document.getElementById('csvFile').addEventListener('change', function(e) {
+        let file = e.target.files[0];
+        if (file && file.name.endsWith('.csv')) {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let csvData = event.target.result;
+                parseCSV(csvData);
+            };
+            reader.readAsText(file);
         }
-    </script>
+    });
+
+    // Function to parse CSV and insert data into the table
+    function parseCSV(csv) {
+        const rows = csv.split('\n');
+        const tableBody = document.getElementById('csvTable').getElementsByTagName('tbody')[0];
+        tableBody.innerHTML = '';  // Clear the existing table data
+
+        rows.forEach((row, index) => {
+            if (index === 0) return; // Skip header row
+            const columns = row.split(',');
+            if (columns.length === 9) {
+                const newRow = tableBody.insertRow();
+                columns.forEach((column, colIndex) => {
+                    let cell = newRow.insertCell(colIndex);
+                    cell.textContent = column.trim();
+                });
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
