@@ -127,9 +127,13 @@
                 minRow.classList.add('highlight');
             }
 
-            // Automatically add new row if the last row has a total > 0
+            // Automatically add new row if the last row's total is greater than 0
             if (lastRowWithTotal) {
-                addRow(lastRowWithTotal);
+                // Check if the last row's total is greater than 0 and the next row is empty
+                const lastRowTotal = parseFloat(lastRowWithTotal.querySelector('.total').textContent);
+                if (lastRowTotal > 0) {
+                    addRow(lastRowWithTotal);
+                }
             }
         }
 
