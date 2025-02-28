@@ -98,7 +98,7 @@
             let minRow = null;
             let lastRowWithTotal = null;
 
-            rows.forEach(row => {
+            rows.forEach((row, index) => {
                 const qty = row.querySelector('.qty').value || 1;
                 const price = parseFloat(row.querySelector('.price').value) || 0;
                 const shipping = parseFloat(row.querySelector('.shipping').value) || 0;
@@ -106,19 +106,13 @@
                 const total = (price * qty) + shipping;
                 const totalPerItem = total / qty;
 
-                row.querySelector('.total').textContent = total.toFixed(2);
-                row.querySelector('.totalPerItem').textContent = totalPerItem.toFixed(2);
+                // Update total and total per item, but don't display 0
+                row.querySelector('.total').textContent = total === 0 ? '' : total.toFixed(2);
+                row.querySelector('.totalPerItem').textContent = totalPerItem === 0 ? '' : totalPerItem.toFixed(2);
 
-                if (totalPerItem < minTotalPerItem) {
+                if (totalPerItem < minTotalPerItem && totalPerItem !== 0) {
                     minTotalPerItem = totalPerItem;
                     minRow = row;
-                }
-
-                // Hide row if total and total per item are 0
-                if (total === 0 && totalPerItem === 0) {
-                    row.style.display = 'none';
-                } else {
-                    row.style.display = '';
                 }
 
                 // Keep track of the last row with total > 0
