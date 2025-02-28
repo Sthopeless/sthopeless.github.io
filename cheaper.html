@@ -25,7 +25,7 @@
             text-align: center;
         }
         .highlight {
-            background-color: #ADD8E6;
+            background-color: #ADD8E6; /* Light Blue */
         }
         input[type="number"], input[type="text"], input[type="url"] {
             background-color: #444;
@@ -59,7 +59,6 @@
         <label>
             <input type="checkbox" id="toggleItemInput"> Use this item for new rows
         </label>
-        <input type="text" id="defaultItem" placeholder="Enter item name" disabled />
     </div>
     <table id="priceTable">
         <thead>
@@ -88,13 +87,9 @@
 
     <script>
         const toggleItemInput = document.getElementById('toggleItemInput');
-        const defaultItemInput = document.getElementById('defaultItem');
 
         toggleItemInput.addEventListener('change', () => {
-            defaultItemInput.disabled = !toggleItemInput.checked;
-            if (toggleItemInput.checked) {
-                defaultItemInput.focus();
-            }
+            calculateTotals(); // Recalculate totals when toggle changes
         });
 
         function calculateTotals() {
@@ -148,7 +143,7 @@
             const table = document.querySelector('#priceTable tbody');
             const newRow = document.createElement('tr');
 
-            const itemName = toggleItemInput.checked ? defaultItemInput.value : lastRow.querySelector('.item').value;
+            const itemName = toggleItemInput.checked ? lastRow.querySelector('.item').value : '';
 
             newRow.innerHTML = `
                 <td><input type="number" class="qty" value="1" /></td>
