@@ -93,69 +93,70 @@
         });
 
         function calculateTotals() {
-            const rows = document.querySelectorAll('#priceTable tbody tr');
-            let minTotalPerItem = Infinity;
-            let minRow = null;
-            let lastRowWithTotal = null;
+    const rows = document.querySelectorAll('#priceTable tbody tr');
+    let minTotalPerItem = Infinity;
+    let minRow = null;
+    let lastRowWithTotal = null;
 
-            rows.forEach((row, index) => {
-                const qty = row.querySelector('.qty').value || 1;
-                const price = parseFloat(row.querySelector('.price').value) || 0;
-                const shipping = parseFloat(row.querySelector('.shipping').value) || 0;
+    rows.forEach((row, index) => {
+        const qty = row.querySelector('.qty').value || 1;
+        const price = parseFloat(row.querySelector('.price').value) || 0;
+        const shipping = parseFloat(row.querySelector('.shipping').value) || 0;
 
-                const total = (price * qty) + shipping;
-                const totalPerItem = total / qty;
+        const total = (price * qty) + shipping;
+        const totalPerItem = total / qty;
 
-                // Update total and total per item, but don't display 0
-                row.querySelector('.total').textContent = total === 0 ? '' : total.toFixed(2);
-                row.querySelector('.totalPerItem').textContent = totalPerItem === 0 ? '' : totalPerItem.toFixed(2);
+        // Update total and total per item, but don't display 0
+        row.querySelector('.total').textContent = total === 0 ? '' : total.toFixed(2);
+        row.querySelector('.totalPerItem').textContent = totalPerItem === 0 ? '' : totalPerItem.toFixed(2);
 
-                if (totalPerItem < minTotalPerItem && totalPerItem !== 0) {
-                    minTotalPerItem = totalPerItem;
-                    minRow = row;
-                }
-
-                // Keep track of the last row with total > 0
-                if (total > 0) {
-                    lastRowWithTotal = row;
-                }
-            });
-
-            // Highlight the row with the lowest Total per Item
-            rows.forEach(row => row.classList.remove('highlight'));
-            if (minRow) {
-                minRow.classList.add('highlight');
-            }
-
-            // Automatically add new row if the last row's total is greater than 0
-            if (lastRowWithTotal) {
-                // Check if the last row's total is greater than 0 and the next row is empty
-                const lastRowTotal = parseFloat(lastRowWithTotal.querySelector('.total').textContent);
-                if (lastRowTotal > 0) {
-                    addRow(lastRowWithTotal);
-                }
-            }
+        if (totalPerItem < minTotalPerItem && totalPerItem !== 0) {
+            minTotalPerItem = totalPerItem;
+            minRow = row;
         }
 
-        function addRow(lastRow) {
-            const table = document.querySelector('#priceTable tbody');
-            const newRow = document.createElement('tr');
-
-            const itemName = toggleItemInput.checked ? lastRow.querySelector('.item').value : '';
-
-            newRow.innerHTML = `
-                <td><input type="number" class="qty" value="1" /></td>
-                <td><input type="text" class="item" value="${itemName}" /></td>
-                <td><input type="number" class="price" /></td>
-                <td><input type="number" class="shipping" /></td>
-                <td><span class="total">0</span></td>
-                <td><span class="totalPerItem">0</span></td>
-                <td><input type="url" class="url" /></td>
-            `;
-
-            table.appendChild(newRow);
-            attachListeners(newRow);
+        // Keep track of the last row with total > 0
+        if (total > 0) {
+            lastRowWithTotal = row;
         }
+    });
+
+    // Highlight the row with the lowest Total per Item
+    rows.forEach(row => row.classList.remove('highlight'));
+    if (minRow) {
+        minRow.classList.add('highlight');
+    }
+
+    // Automatically add new row if the last row's total is greater than 0
+    if (lastRowWithTotal) {
+        const lastRowTotal = parseFloat(lastRowWithTotal.querySelector('.total').textContent);
+        // Add new row only if the last row's total is greater than 0
+        if (lastRowTotal > 0) {
+            addRow(lastRowWithTotal);
+        }
+    }
+}
+
+function addRow(lastRow) {
+    const table = document.querySelector('#priceTable tbody');
+    const newRow = document.createElement('tr');
+
+    const itemName = toggleItemInput.checked ? lastRow.querySelector('.item').value : '';
+
+    newRow.innerHTML = `
+        <td><input type="number" class="qty" value="1" /></td>
+        <td><input type="text" class="item" value="${itemName}" /></td>
+        <td><input type="number" class="price" /></td>
+        <td><input type="number" class="shipping" /></td>
+        <td><span class="total">0</span></td>
+        <td><span class="totalPerItem">0</span></td>
+        <td><input type="url" class="url" /></td>
+    `;
+
+    table.appendChild(newRow);
+    attachListeners(newRow);
+}
+
 
         function attachListeners(row) {
             row.querySelectorAll('input').forEach(input => {
