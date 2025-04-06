@@ -15,7 +15,9 @@ let cities = [
 let currentCityIndex = 0;
 
 function toggleTheme() {
-    document.body.classList.toggle('retro');
+   # document.body.classList.toggle('retro');
+    document.body.classList.add('retro');
+
 }
 
 function updateUI() {
