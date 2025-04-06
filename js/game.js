@@ -1,5 +1,5 @@
 let currentDay = 1;
-let cash = 500;
+let cash = 5000;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
