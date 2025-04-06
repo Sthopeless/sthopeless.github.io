@@ -26,17 +26,18 @@ button {
     padding: 10px;
     text-align: center;
 }
+.product-container {
+    display: block;
+    margin-bottom: 20px;
+}
 
 .product-buttons {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
-}
-
-.product-container {
-    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .product-buttons button {
-    margin-right: 5px;
+    margin: 0;
+    padding: 10px;
 }
