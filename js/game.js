@@ -3,11 +3,11 @@ let cash = 5000;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
-    { name: "City A", heroin: 50, cocaine: 80, marijuana: 30, ecstasy: 60, meth: 120, acid: 90, shrooms: 110, lsd: 70, fentanyl: 150, crack: 100 },
-    { name: "City B", heroin: 70, cocaine: 60, marijuana: 40, ecstasy: 55, meth: 100, acid: 80, shrooms: 95, lsd: 85, fentanyl: 160, crack: 110 },
-    { name: "City C", heroin: 60, cocaine: 75, marijuana: 35, ecstasy: 65, meth: 110, acid: 85, shrooms: 120, lsd: 75, fentanyl: 140, crack: 90 },
-    { name: "City D", heroin: 55, cocaine: 85, marijuana: 50, ecstasy: 70, meth: 130, acid: 95, shrooms: 100, lsd: 60, fentanyl: 145, crack: 120 },
-    { name: "City E", heroin: 80, cocaine: 70, marijuana: 45, ecstasy: 75, meth: 125, acid: 100, shrooms: 105, lsd: 80, fentanyl: 155, crack: 130 }
+    { name: "City A", heroin: 50, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City B", heroin: 70, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City C", heroin: 60, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City D", heroin: 55, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City E", heroin: 80, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 }
 ];
 let currentCityIndex = 0;
 
@@ -39,6 +39,7 @@ function updateUI() {
             <button onclick="travel(2)">Travel to City C</button>
             <button onclick="travel(3)">Travel to City D</button>
             <button onclick="travel(4)">Travel to City E</button>
+            <button onclick="travelRandom()">Travel to Random City</button> <!-- New button -->
         </div>
         <div>
             <button onclick="buy('heroin')">Buy Heroin (1 unit)</button>
@@ -79,6 +80,14 @@ function updateUI() {
             <button onclick="randomEvent()">Random Event</button>
         </div>
     `;
+}
+
+function travelRandom() {
+    let randomCityIndex;
+    do {
+        randomCityIndex = Math.floor(Math.random() * cities.length);
+    } while (randomCityIndex === currentCityIndex);
+    travel(randomCityIndex);
 }
 
 function travel(index) {
