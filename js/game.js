@@ -1,6 +1,8 @@
+# Update the game to use a dropdown for buying/selling multiple units and add buttons to buy/sell all possible quantity
 
+game_js_content_v3 = """
 let currentDay = 1;
-let cash = 500;
+let cash = 5000;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
@@ -23,6 +25,10 @@ function updateUI() {
         inventoryDisplay += `<li>${product}: ${inventory[product]} units</li>`;
     }
     inventoryDisplay += "</ul>";
+    let productOptions = "";
+    for (let product in inventory) {
+        productOptions += `<option value="${product}">${product}</option>`;
+    }
     document.getElementById("game-container").innerHTML = `
         <h2>Day ${currentDay}</h2>
         <p>Cash: $${cash} | Debt: $${debt}</p>
@@ -63,9 +69,15 @@ function updateUI() {
             <button onclick="sell('crack')">Sell Crack (1 unit)</button>
         </div>
         <div>
+            <label for="productSelect">Select product:</label>
+            <select id="productSelect">
+                ${productOptions}
+            </select>
             <input type="number" id="quantity" min="1" value="1" />
             <button onclick="buyMultiple()">Buy Multiple Units</button>
             <button onclick="sellMultiple()">Sell Multiple Units</button>
+            <button onclick="buyAll()">Buy All Possible Units</button>
+            <button onclick="sellAll()">Sell All Units</button>
         </div>
         <div>
             <button onclick="randomEvent()">Random Event</button>
@@ -96,7 +108,7 @@ function buy(drug) {
 }
 
 function buyMultiple() {
-    const drug = prompt("Which drug do you want to buy?");
+    const drug = document.getElementById("productSelect").value;
     const quantity = parseInt(document.getElementById("quantity").value);
     const city = cities[currentCityIndex];
     const price = city[drug];
@@ -124,7 +136,7 @@ function sell(drug) {
 }
 
 function sellMultiple() {
-    const drug = prompt("Which drug do you want to sell?");
+    const drug = document.getElementById("productSelect").value;
     const quantity = parseInt(document.getElementById("quantity").value);
     if (inventory[drug] >= quantity && quantity > 0) {
         const city = cities[currentCityIndex];
@@ -138,44 +150,39 @@ function sellMultiple() {
     }
 }
 
+function buyAll() {
+    const drug = document.getElementById("productSelect").value;
+    const city = cities[currentCityIndex];
+    const price = city[drug];
+    const maxUnits = Math.floor(cash / price);
+    if (maxUnits > 0) {
+        inventory[drug] += maxUnits;
+        cash -= price * maxUnits;
+        alert(`Bought ${maxUnits} units of ${drug} for $${price * maxUnits}`);
+        updateUI();
+    } else {
+        alert("You don't have enough cash to buy any!");
+    }
+}
+
+function sellAll() {
+    const drug = document.getElementById("productSelect").value;
+    if (inventory[drug] > 0) {
+        const city = cities[currentCityIndex];
+        const price = city[drug];
+        const totalSale = inventory[drug] * price;
+        cash += totalSale;
+        inventory[drug] = 0;
+        alert(`Sold all ${inventory[drug]} units of ${drug} for $${totalSale}`);
+        updateUI();
+    } else {
+        alert(`You don't have any ${drug} to sell!`);
+    }
+}
+
 function randomEvent() {
     const events = [
         { event: "Police bust! Lose $100", action: () => { cash -= 100; } },
         { event: "Mugged! Lose $50", action: () => { cash -= 50; } },
         { event: "Loan shark offers a loan. Loan shark takes 20% interest after 5 days.", action: () => { loan(); } },
-    ];
-    const randomEvent = events[Math.floor(Math.random() * events.length)];
-    randomEvent.action();
-    alert(randomEvent.event);
-    updateUI();
-}
-
-function loan() {
-    if (debt > 0) {
-        alert("You already have an outstanding loan!");
-    } else {
-        let loanAmount = 200;
-        debt += loanAmount;
-        cash += loanAmount;
-        setTimeout(() => { debt += loanAmount * 0.2; }, 5000);  // Interest after 5 days
-    }
-}
-
-function randomPriceChange() {
-    cities.forEach(city => {
-        city.heroin = Math.floor(Math.random() * 100) + 50;
-        city.cocaine = Math.floor(Math.random() * 100) + 60;
-        city.marijuana = Math.floor(Math.random() * 50) + 30;
-        city.ecstasy = Math.floor(Math.random() * 80) + 50;
-        city.meth = Math.floor(Math.random() * 80) + 100;
-        city.acid = Math.floor(Math.random() * 70) + 60;
-        city.shrooms = Math.floor(Math.random() * 70) + 90;
-        city.lsd = Math.floor(Math.random() * 70) + 60;
-        city.fentanyl = Math.floor(Math.random() * 100) + 140;
-        city.crack = Math.floor(Math.random() * 80) + 90;
-    });
-}
-
-window.onload = () => {
-    updateUI();
-};
+   
