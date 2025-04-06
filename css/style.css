@@ -13,3 +13,16 @@ body.retro {
 button {
     margin: 10px;
 }
+
+#game-container > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#game-container button {
+    flex: 1 1 auto;
+    margin: 5px;
+    padding: 10px;
+    text-align: center;
+}
