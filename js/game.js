@@ -1,18 +1,15 @@
 let currentDay = 1;
-let cash = 5000;
+let cash = 500;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
-    { name: "City A", heroin: 50, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
-    { name: "City B", heroin: 70, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
-    { name: "City C", heroin: 60, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
-    { name: "City D", heroin: 55, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
-    { name: "City E", heroin: 80, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 }
+    { name: "City A", heroin: Math.floor(Math.random() * 100) + 50, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City B", heroin: Math.floor(Math.random() * 100) + 70, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City C", heroin: Math.floor(Math.random() * 100) + 60, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City D", heroin: Math.floor(Math.random() * 100) + 55, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 },
+    { name: "City E", heroin: Math.floor(Math.random() * 100) + 80, cocaine: Math.floor(Math.random() * 100) + 60, marijuana: Math.floor(Math.random() * 50) + 30, ecstasy: Math.floor(Math.random() * 80) + 50, meth: Math.floor(Math.random() * 80) + 100, acid: Math.floor(Math.random() * 70) + 60, shrooms: Math.floor(Math.random() * 70) + 90, lsd: Math.floor(Math.random() * 70) + 60, fentanyl: Math.floor(Math.random() * 100) + 140, crack: Math.floor(Math.random() * 80) + 90 }
 ];
 let currentCityIndex = 0;
-
-// Apply retro theme by default
-document.body.classList.add('retro');
 
 function updateUI() {
     const city = cities[currentCityIndex];
@@ -33,6 +30,7 @@ function updateUI() {
     <p>Ecstasy: $${city.ecstasy} | Meth: $${city.meth} | Acid: $${city.acid}</p>
     <p>Shrooms: $${city.shrooms} | LSD: $${city.lsd} | Fentanyl: $${city.fentanyl} | Crack: $${city.crack}</p>
     ${inventoryDisplay}
+<!--
     <div>
         <button onclick="travel(0)">Travel to City A</button>
         <button onclick="travel(1)">Travel to City B</button>
@@ -41,32 +39,29 @@ function updateUI() {
         <button onclick="travel(4)">Travel to City E</button>
         <button onclick="travelRandom()">Travel to Random City</button>
     </div>
-    <div>
-        ${Object.keys(inventory).map(product => `
-            <div class="product-container">
-                <h4>${product}</h4>
-                <div class="product-buttons">
-                    <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
-                    <button onclick="buyAll('${product}')">Buy All ${product}</button>
-                    <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
-                    <button onclick="sellAll('${product}')">Sell All ${product}</button>
-                </div>
-            </div>
-        `).join('')}
-    </div>
+-->
     <div>
         <label for="productSelect">Select product:</label>
         <select id="productSelect">
             ${productOptions}
         </select>
         <input type="number" id="quantity" min="1" value="1" />
-        <button onclick="buyMultiple()">Buy Multiple Units</button>
-        <button onclick="sellMultiple()">Sell Multiple Units</button>
+        <button onclick="buyMultiple()">Buy</button>
+        <button onclick="sellMultiple()">Sell</button>
+        <button onclick="buyAll(document.getElementById('productSelect').value)">Buy All</button>
+        <button onclick="sellAll(document.getElementById('productSelect').value)">Sell All</button>
     </div>
     <div>
         <button onclick="randomEvent()">Random Event</button>
     </div>
 `;
+}
+
+function checkGameOver() {
+    if (cash < 0) {
+        alert("Game Over! You ran out of cash.");
+        location.reload();
+    }
 }
 
 function travelRandom() {
@@ -83,6 +78,7 @@ function travel(index) {
         currentDay++;
         randomPriceChange();
         updateUI();
+        checkGameOver();
     }
 }
 
@@ -173,14 +169,38 @@ function sellAll(product) {
 function randomEvent() {
     const events = [
         { event: "Police bust! Lose $100", action: () => { cash -= 100; } },
+        { event: "You stole a dealer and got $500", action: () => { cash += 500; } },
         { event: "Mugged! Lose $50", action: () => { cash -= 50; } },
-        { event: "Loan shark offers a loan. Loan shark takes 20% interest after 5 days.", action: () => { loan(); } },
+        // { event: "Loan shark offers a loan. Loan shark takes 20% interest after 5 days.", action: () => { loan(); } },
+        { event: "You invested in Cryptos and doubled your money", action: () => { cash *= 2; } },
+        { event: "Cryptos crash! Lose 90% of your cash", action: () => { cash -= cash * 0.9; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
+        { event: "You travel safely", action: () => { cash += 0; } },
     ];
     const randomEvent = events[Math.floor(Math.random() * events.length)];
     randomEvent.action();
-    alert(randomEvent.event);
+    if (randomEvent.event !== "You travel safely") {
+        alert(randomEvent.event);
+    }
+    travelRandom();
     updateUI();
-}
+} 
 
 function loan() {
     if (debt > 0) {
@@ -189,7 +209,7 @@ function loan() {
         let loanAmount = 200;
         debt += loanAmount;
         cash += loanAmount;
-        setTimeout(() => { debt += loanAmount * 0.2; }, 5000);  // Interest after 5 days
+        setTimeout(() => { debt += loanAmount * 0.2; }, 5000);
     }
 }
 
@@ -211,3 +231,10 @@ function randomPriceChange() {
 window.onload = () => {
     updateUI();
 };
+
+document.addEventListener("keydown", (event) => {
+    if (event.code === "Space") {
+        event.preventDefault();
+        travelRandom();
+    }
+});
