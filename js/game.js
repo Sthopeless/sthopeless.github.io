@@ -26,44 +26,44 @@ function updateUI() {
         productOptions += `<option value="${product}">${product}</option>`;
     }
     document.getElementById("game-container").innerHTML = `
-        <h2>Day ${currentDay}</h2>
-        <p>Cash: $${cash} | Debt: $${debt}</p>
-        <h3>${city.name}</h3>
-        <p>Heroin: $${city.heroin} | Cocaine: $${city.cocaine} | Marijuana: $${city.marijuana}</p>
-        <p>Ecstasy: $${city.ecstasy} | Meth: $${city.meth} | Acid: $${city.acid}</p>
-        <p>Shrooms: $${city.shrooms} | LSD: $${city.lsd} | Fentanyl: $${city.fentanyl} | Crack: $${city.crack}</p>
-        ${inventoryDisplay}
-        <div>
-            <button onclick="travel(0)">Travel to City A</button>
-            <button onclick="travel(1)">Travel to City B</button>
-            <button onclick="travel(2)">Travel to City C</button>
-            <button onclick="travel(3)">Travel to City D</button>
-            <button onclick="travel(4)">Travel to City E</button>
-            <button onclick="travelRandom()">Travel to Random City</button>
-        </div>
-        <div>
-            ${Object.keys(inventory).map(product => `
-                <div>
-                    <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
-                    <button onclick="buyAll('${product}')">Buy All ${product}</button>
-                    <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
-                    <button onclick="sellAll('${product}')">Sell All ${product}</button>
-                </div>
-            `).join('')}
-        </div>
-        <div>
-            <label for="productSelect">Select product:</label>
-            <select id="productSelect">
-                ${productOptions}
-            </select>
-            <input type="number" id="quantity" min="1" value="1" />
-            <button onclick="buyMultiple()">Buy Multiple Units</button>
-            <button onclick="sellMultiple()">Sell Multiple Units</button>
-        </div>
-        <div>
-            <button onclick="randomEvent()">Random Event</button>
-        </div>
-    `;
+    <h2>Day ${currentDay}</h2>
+    <p>Cash: $${cash} | Debt: $${debt}</p>
+    <h3>${city.name}</h3>
+    <p>Heroin: $${city.heroin} | Cocaine: $${city.cocaine} | Marijuana: $${city.marijuana}</p>
+    <p>Ecstasy: $${city.ecstasy} | Meth: $${city.meth} | Acid: $${city.acid}</p>
+    <p>Shrooms: $${city.shrooms} | LSD: $${city.lsd} | Fentanyl: $${city.fentanyl} | Crack: $${city.crack}</p>
+    ${inventoryDisplay}
+    <div>
+        <button onclick="travel(0)">Travel to City A</button>
+        <button onclick="travel(1)">Travel to City B</button>
+        <button onclick="travel(2)">Travel to City C</button>
+        <button onclick="travel(3)">Travel to City D</button>
+        <button onclick="travel(4)">Travel to City E</button>
+        <button onclick="travelRandom()">Travel to Random City</button>
+    </div>
+    <div>
+        ${Object.keys(inventory).map(product => `
+            <div class="product-buttons">
+                <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
+                <button onclick="buyAll('${product}')">Buy All ${product}</button>
+                <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
+                <button onclick="sellAll('${product}')">Sell All ${product}</button>
+            </div>
+        `).join('')}
+    </div>
+    <div>
+        <label for="productSelect">Select product:</label>
+        <select id="productSelect">
+            ${productOptions}
+        </select>
+        <input type="number" id="quantity" min="1" value="1" />
+        <button onclick="buyMultiple()">Buy Multiple Units</button>
+        <button onclick="sellMultiple()">Sell Multiple Units</button>
+    </div>
+    <div>
+        <button onclick="randomEvent()">Random Event</button>
+    </div>
+`;
 }
 
 function travelRandom() {
