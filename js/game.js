@@ -39,31 +39,17 @@ function updateUI() {
             <button onclick="travel(2)">Travel to City C</button>
             <button onclick="travel(3)">Travel to City D</button>
             <button onclick="travel(4)">Travel to City E</button>
-            <button onclick="travelRandom()">Travel to Random City</button> <!-- New button -->
+            <button onclick="travelRandom()">Travel to Random City</button>
         </div>
         <div>
-            <button onclick="buy('heroin')">Buy Heroin (1 unit)</button>
-            <button onclick="buy('cocaine')">Buy Cocaine (1 unit)</button>
-            <button onclick="buy('marijuana')">Buy Marijuana (1 unit)</button>
-            <button onclick="buy('ecstasy')">Buy Ecstasy (1 unit)</button>
-            <button onclick="buy('meth')">Buy Meth (1 unit)</button>
-            <button onclick="buy('acid')">Buy Acid (1 unit)</button>
-            <button onclick="buy('shrooms')">Buy Shrooms (1 unit)</button>
-            <button onclick="buy('lsd')">Buy LSD (1 unit)</button>
-            <button onclick="buy('fentanyl')">Buy Fentanyl (1 unit)</button>
-            <button onclick="buy('crack')">Buy Crack (1 unit)</button>
-        </div>
-        <div>
-            <button onclick="sell('heroin')">Sell Heroin (1 unit)</button>
-            <button onclick="sell('cocaine')">Sell Cocaine (1 unit)</button>
-            <button onclick="sell('marijuana')">Sell Marijuana (1 unit)</button>
-            <button onclick="sell('ecstasy')">Sell Ecstasy (1 unit)</button>
-            <button onclick="sell('meth')">Sell Meth (1 unit)</button>
-            <button onclick="sell('acid')">Sell Acid (1 unit)</button>
-            <button onclick="sell('shrooms')">Sell Shrooms (1 unit)</button>
-            <button onclick="sell('lsd')">Sell LSD (1 unit)</button>
-            <button onclick="sell('fentanyl')">Sell Fentanyl (1 unit)</button>
-            <button onclick="sell('crack')">Sell Crack (1 unit)</button>
+            ${Object.keys(inventory).map(product => `
+                <div>
+                    <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
+                    <button onclick="buyAll('${product}')">Buy All ${product}</button>
+                    <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
+                    <button onclick="sellAll('${product}')">Sell All ${product}</button>
+                </div>
+            `).join('')}
         </div>
         <div>
             <label for="productSelect">Select product:</label>
@@ -73,8 +59,6 @@ function updateUI() {
             <input type="number" id="quantity" min="1" value="1" />
             <button onclick="buyMultiple()">Buy Multiple Units</button>
             <button onclick="sellMultiple()">Sell Multiple Units</button>
-            <button onclick="buyAll()">Buy All Possible Units</button>
-            <button onclick="sellAll()">Sell All Units</button>
         </div>
         <div>
             <button onclick="randomEvent()">Random Event</button>
@@ -155,33 +139,31 @@ function sellMultiple() {
     }
 }
 
-function buyAll() {
-    const drug = document.getElementById("productSelect").value;
+function buyAll(product) {
     const city = cities[currentCityIndex];
-    const price = city[drug];
+    const price = city[product];
     const maxUnits = Math.floor(cash / price);
     if (maxUnits > 0) {
-        inventory[drug] += maxUnits;
+        inventory[product] += maxUnits;
         cash -= price * maxUnits;
-        alert(`Bought ${maxUnits} units of ${drug} for $${price * maxUnits}`);
+        alert(`Bought ${maxUnits} units of ${product} for $${price * maxUnits}`);
         updateUI();
     } else {
         alert("You don't have enough cash to buy any!");
     }
 }
 
-function sellAll() {
-    const drug = document.getElementById("productSelect").value;
-    if (inventory[drug] > 0) {
+function sellAll(product) {
+    if (inventory[product] > 0) {
         const city = cities[currentCityIndex];
-        const price = city[drug];
-        const totalSale = inventory[drug] * price;
+        const price = city[product];
+        const totalSale = inventory[product] * price;
         cash += totalSale;
-        inventory[drug] = 0;
-        alert(`Sold all ${inventory[drug]} units of ${drug} for $${totalSale}`);
+        inventory[product] = 0;
+        alert(`Sold all units of ${product} for $${totalSale}`);
         updateUI();
     } else {
-        alert(`You don't have any ${drug} to sell!`);
+        alert(`You don't have any ${product} to sell!`);
     }
 }
 
