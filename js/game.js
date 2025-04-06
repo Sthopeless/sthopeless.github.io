@@ -1,8 +1,5 @@
-# Update the game to use a dropdown for buying/selling multiple units and add buttons to buy/sell all possible quantity
-
-game_js_content_v3 = """
 let currentDay = 1;
-let cash = 5000;
+let cash = 500;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
@@ -14,11 +11,8 @@ let cities = [
 ];
 let currentCityIndex = 0;
 
-function toggleTheme() {
-   # document.body.classList.toggle('retro');
-    document.body.classList.add('retro');
-
-}
+// Apply retro theme by default
+document.body.classList.add('retro');
 
 function updateUI() {
     const city = cities[currentCityIndex];
@@ -187,4 +181,11 @@ function randomEvent() {
         { event: "Police bust! Lose $100", action: () => { cash -= 100; } },
         { event: "Mugged! Lose $50", action: () => { cash -= 50; } },
         { event: "Loan shark offers a loan. Loan shark takes 20% interest after 5 days.", action: () => { loan(); } },
-   
+    ];
+    const randomEvent = events[Math.floor(Math.random() * events.length)];
+    randomEvent.action();
+    alert(randomEvent.event);
+    updateUI();
+}
+
+updateUI();
