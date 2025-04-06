@@ -1,5 +1,5 @@
 let currentDay = 1;
-let cash = 5000;
+let cash = 500;
 let debt = 0;
 let inventory = { heroin: 0, cocaine: 0, marijuana: 0, ecstasy: 0, meth: 0, acid: 0, shrooms: 0, lsd: 0, fentanyl: 0, crack: 0 };
 let cities = [
@@ -188,34 +188,32 @@ function randomEvent() {
     updateUI();
 }
 
-// function loan() {
-//     if (debt > 0) {
-//         alert("You already have an outstanding loan!");
-//     } else {
-//         let loanAmount = 200;
-//         debt += loanAmount;
-//         cash += loanAmount;
-//         setTimeout(() => { debt += loanAmount * 0.2; }, 5000);  // Interest after 5 days
-//     }
-// }
+function loan() {
+    if (debt > 0) {
+        alert("You already have an outstanding loan!");
+    } else {
+        let loanAmount = 200;
+        debt += loanAmount;
+        cash += loanAmount;
+        setTimeout(() => { debt += loanAmount * 0.2; }, 5000);  // Interest after 5 days
+    }
+}
 
-// function randomPriceChange() {
-//     cities.forEach(city => {
-//         city.heroin = Math.floor(Math.random() * 100) + 50;
-//         city.cocaine = Math.floor(Math.random() * 100) + 60;
-//         city.marijuana = Math.floor(Math.random() * 50) + 30;
-//         city.ecstasy = Math.floor(Math.random() * 80) + 50;
-//         city.meth = Math.floor(Math.random() * 80) + 100;
-//         city.acid = Math.floor(Math.random() * 70) + 60;
-//         city.shrooms = Math.floor(Math.random() * 70) + 90;
-//         city.lsd = Math.floor(Math.random() * 70) + 60;
-//         city.fentanyl = Math.floor(Math.random() * 100) + 140;
-//         city.crack = Math.floor(Math.random() * 80) + 90;
-//     });
-// }
+function randomPriceChange() {
+    cities.forEach(city => {
+        city.heroin = Math.floor(Math.random() * 100) + 50;
+        city.cocaine = Math.floor(Math.random() * 100) + 60;
+        city.marijuana = Math.floor(Math.random() * 50) + 30;
+        city.ecstasy = Math.floor(Math.random() * 80) + 50;
+        city.meth = Math.floor(Math.random() * 80) + 100;
+        city.acid = Math.floor(Math.random() * 70) + 60;
+        city.shrooms = Math.floor(Math.random() * 70) + 90;
+        city.lsd = Math.floor(Math.random() * 70) + 60;
+        city.fentanyl = Math.floor(Math.random() * 100) + 140;
+        city.crack = Math.floor(Math.random() * 80) + 90;
+    });
+}
 
-// window.onload = () => {
-//     updateUI();
-// };
-
-updateUI();
+window.onload = () => {
+    updateUI();
+};
