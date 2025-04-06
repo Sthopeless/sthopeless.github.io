@@ -29,6 +29,14 @@ button {
 
 .product-buttons {
     display: flex;
-    gap: 10px; /* Adjust the gap between buttons */
-    margin-bottom: 10px; /* Add some space below each product line */
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.product-container {
+    margin-bottom: 15px;
+}
+
+.product-buttons button {
+    margin-right: 5px;
 }
