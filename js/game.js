@@ -43,11 +43,14 @@ function updateUI() {
     </div>
     <div>
         ${Object.keys(inventory).map(product => `
-            <div class="product-buttons">
-                <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
-                <button onclick="buyAll('${product}')">Buy All ${product}</button>
-                <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
-                <button onclick="sellAll('${product}')">Sell All ${product}</button>
+            <div class="product-container">
+                <h4>${product}</h4>
+                <div class="product-buttons">
+                    <button onclick="buy('${product}')">Buy ${product} (1 unit)</button>
+                    <button onclick="buyAll('${product}')">Buy All ${product}</button>
+                    <button onclick="sell('${product}')">Sell ${product} (1 unit)</button>
+                    <button onclick="sellAll('${product}')">Sell All ${product}</button>
+                </div>
             </div>
         `).join('')}
     </div>
