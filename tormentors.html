@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tormentors of Torghast Tracker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+      background-color: #1a1a1a;
+      color: #eee;
+    }
+    h1 {
+      color: #ffcc00;
+    }
+    label, select, input, button {
+      font-size: 1rem;
+      margin: 8px 0;
+    }
+    input, select {
+      padding: 6px;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tormentors of Torghast Spawn Calculator</h1>
+
+  <label for="startTime">Time and date of boss spawn:</label><br>
+  <input type="datetime-local" id="startTime"><br>
+
+  <label for="bossName">Which boss spawned at that time?</label><br>
+  <select id="bossName"></select><br>
+
+  <button onclick="calculateSpawns()">Calculate Spawns</button>
+
+  <h2>Predicted Spawn Order and Times:</h2>
+  <ul id="output"></ul>
+
+  <script>
+    const bosses = [
+      "Algel the Haunter",
+      "Malleus Grakizz",
+      "Gralebboih",
+      "The Mass of Souls",
+      "Manifestation of Pain",
+      "Versya the Damned",
+      "Zul'gath the Flayer",
+      "Golmak the Monstrosity",
+      "Sentinel Pyrophus",
+      "Mugrem the Soul Devourer",
+      "Kazj the Sentinel",
+      "Promathiz",
+      "Sentinel Shakorzeth",
+      "Intercessor Razzra",
+      "Gruukuuek the Elder"
+    ];
+
+    const bossSelect = document.getElementById("bossName");
+    bosses.forEach(boss => {
+      const option = document.createElement("option");
+      option.value = boss;
+      option.textContent = boss;
+      bossSelect.appendChild(option);
+    });
+
+    function calculateSpawns() {
+      const input = document.getElementById("startTime").value;
+      const selectedBoss = document.getElementById("bossName").value;
+
+      if (!input || !selectedBoss) {
+        alert("Please enter both a date/time and boss name.");
+        return;
+      }
+
+      const baseTime = new Date(input);
+      const bossIndex = bosses.indexOf(selectedBoss);
+      const output = document.getElementById("output");
+      output.innerHTML = "";
+
+      for (let i = 0; i < bosses.length; i++) {
+        const spawnTime = new Date(baseTime.getTime() + i * 2 * 60 * 60 * 1000);
+        const bossName = bosses[(bossIndex + i) % bosses.length];
+
+        const timeStr = spawnTime.toLocaleString(undefined, {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        const li = document.createElement("li");
+        li.textContent = `${timeStr} — ${bossName}`;
+        output.appendChild(li);
+      }
+    }
+  </script>
+</body>
+</html>
