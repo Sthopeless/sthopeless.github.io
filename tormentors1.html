@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tormentors of Torghast Tracker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+      background-color: #1a1a1a;
+      color: #eee;
+    }
+    h1 {
+      color: #ffcc00;
+    }
+    label, select, input, button {
+      font-size: 1rem;
+      margin: 8px 0;
+    }
+    input, select {
+      padding: 6px;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #444;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    .boss-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .boss-item {
+      background-color: #2a2a2a;
+      padding: 10px;
+      border-radius: 5px;
+      flex: 1 1 200px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tormentors of Torghast Spawn Planner</h1>
+
+  <label for="startTime">Time and date of boss spawn:</label><br>
+  <input type="datetime-local" id="startTime"><br>
+
+  <label for="bossName">Which boss spawned at that time?</label><br>
+  <select id="bossName"></select><br>
+
+  <h2>Mark Completed Bosses</h2>
+  <div class="boss-list" id="checkboxes"></div>
+
+  <button onclick="calculateSpawns()">Calculate Spawns</button>
+
+  <h2>Upcoming Spawns (Next 7 for Each Incomplete Boss)</h2>
+  <div id="output"></div>
+
+  <script>
+    const bosses = [
+      "Algel the Haunter",
+      "Malleus Grakizz",
+      "Gralebboih",
+      "The Mass of Souls",
+      "Manifestation of Pain",
+      "Versya the Damned",
+      "Zul'gath the Flayer",
+      "Golmak the Monstrosity",
+      "Sentinel Pyrophus",
+      "Mugrem the Soul Devourer",
+      "Kazj the Sentinel",
+      "Promathiz",
+      "Sentinel Shakorzeth",
+      "Intercessor Razzra",
+      "Gruukuuek the Elder"
+    ];
+
+    const bossSelect = document.getElementById("bossName");
+    const checkboxContainer = document.getElementById("checkboxes");
+
+    // Populate dropdown and checkboxes
+    bosses.forEach((boss, index) => {
+      const option = document.createElement("option");
+      option.value = boss;
+      option.textContent = boss;
+      bossSelect.appendChild(option);
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "boss-item";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = `check-${index}`;
+      checkbox.value = boss;
+
+      const label = document.createElement("label");
+      label.htmlFor = `check-${index}`;
+      label.textContent = boss;
+
+      wrapper.appendChild(checkbox);
+      wrapper.appendChild(document.createElement("br"));
+      wrapper.appendChild(label);
+      checkboxContainer.appendChild(wrapper);
+    });
+
+    function calculateSpawns() {
+      const input = document.getElementById("startTime").value;
+      const selectedBoss = document.getElementById("bossName").value;
+      const baseTime = new Date(input);
+      if (!input || !selectedBoss) {
+        alert("Please enter both a date/time and a boss.");
+        return;
+      }
+
+      const selectedIndex = bosses.indexOf(selectedBoss);
+      const completed = new Set();
+      bosses.forEach((boss, index) => {
+        const checkbox = document.getElementById(`check-${index}`);
+        if (checkbox.checked) {
+          completed.add(boss);
+        }
+      });
+
+      const output = document.getElementById("output");
+      output.innerHTML = "";
+
+      // Simulate next 200 spawns (15 bosses, every 2h)
+      const fullRotation = [];
+      for (let i = 0; i < 200; i++) {
+        const boss = bosses[(selectedIndex + i) % bosses.length];
+        const spawnTime = new Date(baseTime.getTime() + i * 2 * 60 * 60 * 1000);
+        fullRotation.push({ boss, spawnTime });
+      }
+
+      // For each incomplete boss, find next 7 appearances
+      bosses.forEach(boss => {
+        if (completed.has(boss)) return;
+
+        const times = fullRotation.filter(entry => entry.boss === boss).slice(0, 7);
+        const section = document.createElement("div");
+        section.className = "boss-item";
+
+        const title = document.createElement("h3");
+        title.textContent = boss;
+        section.appendChild(title);
+
+        const list = document.createElement("ul");
+        times.forEach(entry => {
+          const li = document.createElement("li");
+          li.textContent = entry.spawnTime.toLocaleString(undefined, {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+          list.appendChild(li);
+        });
+
+        section.appendChild(list);
+        output.appendChild(section);
+      });
+    }
+  </script>
+</body>
+</html>
