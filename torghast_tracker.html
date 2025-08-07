@@ -38,10 +38,16 @@
     }
 
     #checkboxes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 5px;
+      display: flex;
+      gap: 40px;
       margin-bottom: 20px;
+    }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
     .boss-checkbox {
@@ -88,7 +94,11 @@
   <select id="bossName"></select>
 
   <h2>Mark Completed Bosses</h2>
-  <div id="checkboxes"></div>
+  <h3>Minions of the Cold Dark</h3>
+  <div id="checkboxes">
+    <div id="leftColumn" class="column"></div>
+    <div id="rightColumn" class="column"></div>
+  </div>
 
   <button onclick="calculateSpawns()">Calculate Spawns</button>
 
@@ -96,36 +106,35 @@
   <div id="output"></div>
 
   <script>
-    const bosses = [
-      "Algel the Haunter",
-      "Malleus Grakizz",
-      "Gralebboih",
-      "The Mass of Souls",
-      "Manifestation of Pain",
-      "Versya the Damned",
-      "Zul'gath the Flayer",
-      "Golmak the Monstrosity",
-      "Sentinel Pyrophus",
-      "Mugrem the Soul Devourer",
-      "Kazj the Sentinel",
-      "Promathiz",
-      "Sentinel Shakorzeth",
-      "Intercessor Razzra",
-      "Gruukuuek the Elder"
+    const allBosses = [
+      "Versya the Damned", "Promathiz", "Gruukuuek the Elder", "Mugrem the Soul Devourer",
+      "Algel the Haunter", "Kazj the Sentinel", "Malleus Grakizz", "Golmak the Monstrosity",
+      "Gralebboih", "Sentinel Pyrophus", "Zul'gath the Flayer", "The Mass of Souls",
+      "Sentinel Shakorzeth", "Intercessor Razzra", "Manifestation of Pain"
+    ];
+
+    const leftBosses = [
+      "Versya the Damned", "Promathiz", "Gruukuuek the Elder", "Mugrem the Soul Devourer",
+      "Algel the Haunter", "Kazj the Sentinel", "Malleus Grakizz", "Golmak the Monstrosity"
+    ];
+
+    const rightBosses = [
+      "Gralebboih", "Sentinel Pyrophus", "Zul'gath the Flayer", "The Mass of Souls",
+      "Sentinel Shakorzeth", "Intercessor Razzra", "Manifestation of Pain"
     ];
 
     const bossSelect = document.getElementById("bossName");
-    const checkboxContainer = document.getElementById("checkboxes");
+    const leftColumn = document.getElementById("leftColumn");
+    const rightColumn = document.getElementById("rightColumn");
 
-    // Create dropdown and checkboxes
-    bosses.forEach((boss, index) => {
-      // Dropdown
+    allBosses.forEach((boss, index) => {
       const option = document.createElement("option");
       option.value = boss;
       option.textContent = boss;
       bossSelect.appendChild(option);
+    });
 
-      // Checkbox list
+    function createCheckbox(boss, index) {
       const wrapper = document.createElement("div");
       wrapper.className = "boss-checkbox";
 
@@ -140,7 +149,15 @@
 
       wrapper.appendChild(checkbox);
       wrapper.appendChild(label);
-      checkboxContainer.appendChild(wrapper);
+      return wrapper;
+    }
+
+    leftBosses.forEach((boss, i) => {
+      leftColumn.appendChild(createCheckbox(boss, i));
+    });
+
+    rightBosses.forEach((boss, i) => {
+      rightColumn.appendChild(createCheckbox(boss, i + leftBosses.length));
     });
 
     function calculateSpawns() {
@@ -153,12 +170,12 @@
         return;
       }
 
-      const selectedIndex = bosses.indexOf(selectedBoss);
+      const selectedIndex = allBosses.indexOf(selectedBoss);
       const completed = new Set();
 
-      bosses.forEach((boss, index) => {
+      allBosses.forEach((boss, index) => {
         const checkbox = document.getElementById(`check-${index}`);
-        if (checkbox.checked) {
+        if (checkbox && checkbox.checked) {
           completed.add(boss);
         }
       });
@@ -166,10 +183,9 @@
       const output = document.getElementById("output");
       output.innerHTML = "";
 
-      // Build 7-day view: every 2h = 12 per day = 84 entries
       const fullRotation = [];
       for (let i = 0; i < 84; i++) {
-        const boss = bosses[(selectedIndex + i) % bosses.length];
+        const boss = allBosses[(selectedIndex + i) % allBosses.length];
         const spawnTime = new Date(baseTime.getTime() + i * 2 * 60 * 60 * 1000);
         fullRotation.push({ boss, spawnTime });
       }
