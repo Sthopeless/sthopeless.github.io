@@ -18,26 +18,43 @@
     }
 
     .bosses {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
-    .bosses label {
-      display: inline-block;
-      margin-right: 10px;
+    .boss-list {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .boss-list label {
+      display: block;
       margin-bottom: 5px;
+    }
+
+    .days-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     .day-box {
       background-color: #1e1e1e;
       border: 1px solid #333;
-      border-radius: 5px;
-      padding: 10px 15px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      padding: 15px;
+      width: 250px;
+      flex: 0 0 auto;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
 
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     li {
@@ -54,17 +71,24 @@
       color: #888;
       margin-top: 40px;
     }
+
+    @media (max-width: 600px) {
+      .day-box {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
   <h1>Tormentors of Torghast - Spawn Planner</h1>
+  <h3>Minions of the Cold Dark</h3>
 
   <div class="bosses">
     <h2>Select completed bosses</h2>
-    <div id="bossList"></div>
+    <div class="boss-list" id="bossList"></div>
   </div>
 
-  <div id="output"></div>
+  <div class="days-container" id="output"></div>
 
   <div class="footer">Made for Grim Batol players – Updated: 7 August 2025</div>
 
