@@ -10,44 +10,71 @@
       background-color: #1a1a1a;
       color: #eee;
     }
-    h1 {
+
+    h1, h2, h3 {
       color: #ffcc00;
     }
+
     label, select, input, button {
       font-size: 1rem;
       margin: 8px 0;
     }
+
     input, select {
       padding: 6px;
     }
+
     button {
       padding: 8px 12px;
       background-color: #444;
       color: #fff;
       border: none;
       cursor: pointer;
+      margin-top: 10px;
     }
+
     button:hover {
       background-color: #666;
     }
-    .boss-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+
+    #checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 5px;
       margin-bottom: 20px;
     }
-    .boss-item {
-      background-color: #2a2a2a;
-      padding: 10px;
+
+    .boss-checkbox {
+      background: #2a2a2a;
+      padding: 8px;
       border-radius: 5px;
-      flex: 1 1 200px;
     }
+
+    #output {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .day-box {
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+
+    .day-box h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #00ffff;
+    }
+
     ul {
-      list-style-type: none;
-      padding: 0;
+      padding-left: 20px;
     }
+
     li {
-      margin: 4px 0;
+      margin: 3px 0;
     }
   </style>
 </head>
@@ -58,14 +85,14 @@
   <input type="datetime-local" id="startTime"><br>
 
   <label for="bossName">Which boss spawned at that time?</label><br>
-  <select id="bossName"></select><br>
+  <select id="bossName"></select>
 
   <h2>Mark Completed Bosses</h2>
-  <div class="boss-list" id="checkboxes"></div>
+  <div id="checkboxes"></div>
 
   <button onclick="calculateSpawns()">Calculate Spawns</button>
 
-  <h2>Upcoming Spawns (Next 7 for Each Incomplete Boss)</h2>
+  <h2>Upcoming Spawns (Next 7 Days)</h2>
   <div id="output"></div>
 
   <script>
@@ -90,15 +117,18 @@
     const bossSelect = document.getElementById("bossName");
     const checkboxContainer = document.getElementById("checkboxes");
 
-    // Populate dropdown and checkboxes
+    // Create dropdown and checkboxes
     bosses.forEach((boss, index) => {
+      // Dropdown
       const option = document.createElement("option");
       option.value = boss;
       option.textContent = boss;
       bossSelect.appendChild(option);
 
+      // Checkbox list
       const wrapper = document.createElement("div");
-      wrapper.className = "boss-item";
+      wrapper.className = "boss-checkbox";
+
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = `check-${index}`;
@@ -106,10 +136,9 @@
 
       const label = document.createElement("label");
       label.htmlFor = `check-${index}`;
-      label.textContent = boss;
+      label.textContent = " " + boss;
 
       wrapper.appendChild(checkbox);
-      wrapper.appendChild(document.createElement("br"));
       wrapper.appendChild(label);
       checkboxContainer.appendChild(wrapper);
     });
@@ -118,13 +147,15 @@
       const input = document.getElementById("startTime").value;
       const selectedBoss = document.getElementById("bossName").value;
       const baseTime = new Date(input);
+
       if (!input || !selectedBoss) {
-        alert("Please enter both a date/time and a boss.");
+        alert("Please enter both a date/time and boss name.");
         return;
       }
 
       const selectedIndex = bosses.indexOf(selectedBoss);
       const completed = new Set();
+
       bosses.forEach((boss, index) => {
         const checkbox = document.getElementById(`check-${index}`);
         if (checkbox.checked) {
@@ -135,43 +166,44 @@
       const output = document.getElementById("output");
       output.innerHTML = "";
 
-      // Simulate next 200 spawns (15 bosses, every 2h)
+      // Build 7-day view: every 2h = 12 per day = 84 entries
       const fullRotation = [];
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 84; i++) {
         const boss = bosses[(selectedIndex + i) % bosses.length];
         const spawnTime = new Date(baseTime.getTime() + i * 2 * 60 * 60 * 1000);
         fullRotation.push({ boss, spawnTime });
       }
 
-      // For each incomplete boss, find next 7 appearances
-      bosses.forEach(boss => {
-        if (completed.has(boss)) return;
-
-        const times = fullRotation.filter(entry => entry.boss === boss).slice(0, 7);
+      // Group by day
+      for (let d = 0; d < 7; d++) {
         const section = document.createElement("div");
-        section.className = "boss-item";
+        section.className = "day-box";
 
         const title = document.createElement("h3");
-        title.textContent = boss;
+        const dayDate = new Date(baseTime.getTime() + d * 24 * 60 * 60 * 1000);
+        title.textContent = `Day ${d + 1} – ${dayDate.toLocaleDateString(undefined, {
+          weekday: "short", month: "short", day: "numeric"
+        })}`;
         section.appendChild(title);
 
         const list = document.createElement("ul");
-        times.forEach(entry => {
-          const li = document.createElement("li");
-          li.textContent = entry.spawnTime.toLocaleString(undefined, {
-            weekday: "short",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-          });
-          list.appendChild(li);
-        });
+        for (let h = 0; h < 12; h++) {
+          const index = d * 12 + h;
+          const entry = fullRotation[index];
+          if (!completed.has(entry.boss)) {
+            const li = document.createElement("li");
+            li.textContent = `${entry.spawnTime.toLocaleTimeString(undefined, {
+              hour: '2-digit', minute: '2-digit'
+            })} — ${entry.boss}`;
+            list.appendChild(li);
+          }
+        }
 
-        section.appendChild(list);
-        output.appendChild(section);
-      });
+        if (list.children.length > 0) {
+          section.appendChild(list);
+          output.appendChild(section);
+        }
+      }
     }
   </script>
 </body>
