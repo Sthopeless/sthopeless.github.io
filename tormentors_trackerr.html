@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tormentors of Torghast</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #ffcc00;
+    }
+
+    .bosses {
+      margin-bottom: 20px;
+    }
+
+    .bosses label {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 5px;
+    }
+
+    .day-box {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 4px 0;
+    }
+
+    .highlight {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .footer {
+      font-size: 0.85em;
+      color: #888;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tormentors of Torghast - Spawn Planner</h1>
+
+  <div class="bosses">
+    <h2>Select completed bosses</h2>
+    <div id="bossList"></div>
+  </div>
+
+  <div id="output"></div>
+
+  <div class="footer">Made for Grim Batol players – Updated: 7 August 2025</div>
+
+  <script>
+    const bosses = [
+      "Algel the Haunter",
+      "Malleus Grakizz",
+      "Gralebboih",
+      "The Mass of Souls",
+      "Manifestation of Pain",
+      "Versya the Damned",
+      "Zul'gath the Flayer",
+      "Golmak The Monstrosity",
+      "Sentinel Pyrophus",
+      "Mugrem the Soul Devourer",
+      "Kazj The Sentinel",
+      "Promathiz",
+      "Sentinel Shakorzeth",
+      "Intercessor Razzra",
+      "Gruukuuek the Elder"
+    ];
+
+    const rotation = bosses;
+    const intervalHours = 2;
+    const startTime = new Date("2025-08-07T00:00:00-08:00");
+
+    const bossList = document.getElementById("bossList");
+    bosses.forEach(boss => {
+      const id = boss.replace(/\s+/g, "_");
+      bossList.innerHTML += `
+        <label><input type="checkbox" id="${id}" /> ${boss}</label>
+      `;
+    });
+
+    const output = document.getElementById("output");
+
+    function calculateSpawns() {
+      output.innerHTML = "";
+
+      const completed = new Set();
+      bosses.forEach(boss => {
+        const id = boss.replace(/\s+/g, "_");
+        if (document.getElementById(id).checked) {
+          completed.add(boss);
+        }
+      });
+
+      const fullRotation = [];
+      for (let i = 0; i < 84; i++) {
+        const spawnTime = new Date(startTime.getTime() + i * intervalHours * 60 * 60 * 1000);
+        const boss = rotation[i % rotation.length];
+        fullRotation.push({ spawnTime, boss });
+      }
+
+      // Group by calendar day
+      const groupedByDay = {};
+      fullRotation.forEach((entry) => {
+        const dateKey = entry.spawnTime.toDateString();
+        if (!groupedByDay[dateKey]) {
+          groupedByDay[dateKey] = [];
+        }
+        if (!completed.has(entry.boss)) {
+          groupedByDay[dateKey].push(entry);
+        }
+      });
+
+      // Sort by day
+      const sortedDates = Object.keys(groupedByDay).sort((a, b) => new Date(a) - new Date(b));
+
+      sortedDates.slice(0, 7).forEach((dateKey, dayIndex) => {
+        const section = document.createElement("div");
+        section.className = "day-box";
+
+        const title = document.createElement("h3");
+        const dateObj = new Date(dateKey);
+        title.textContent = `Day ${dayIndex + 1} – ${dateObj.toLocaleDateString(undefined, {
+          weekday: "short", month: "short", day: "numeric"
+        })}`;
+        section.appendChild(title);
+
+        const list = document.createElement("ul");
+        const entries = groupedByDay[dateKey].sort((a, b) => a.spawnTime - b.spawnTime);
+
+        entries.forEach((entry, i) => {
+          const li = document.createElement("li");
+          li.textContent = `${entry.spawnTime.toLocaleTimeString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit'
+          })} — ${entry.boss}`;
+          if (dayIndex === 0 && i === 0) li.classList.add("highlight");
+          list.appendChild(li);
+        });
+
+        if (list.children.length > 0) {
+          section.appendChild(list);
+          output.appendChild(section);
+        }
+      });
+    }
+
+    document.querySelectorAll("input[type=checkbox]").forEach(input => {
+      input.addEventListener("change", calculateSpawns);
+    });
+
+    calculateSpawns(); // initial run
+  </script>
+</body>
+</html>
